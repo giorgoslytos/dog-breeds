@@ -19,17 +19,33 @@
     <mat-card-content>
       <div fxLayout="row" fxLayoutAlign="space-between">
         <h3 matLine>
-          <!-- {{
-            dogInfoArr[0].breedName[0].toUpperCase() +
-              dogInfoArr[0].breedName.slice(1)
-          }} -->
-          <!-- {{ dogInfo[0].breedName[0].split(' ').map(word => word[0].toUpperCase()+word.slice(1)).join(' ') }} -->
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-icon color="accent">info</mat-icon>
+              <mat-panel-title>more info</mat-panel-title>
+              <mat-panel-description>
+                This or a related breed
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-card-header [ngStyle]="{ 'justify-content': 'left' }">
+              <div
+                mat-card-avatar
+                class="example-header-image"
+                [ngStyle]="{
+                  'background-image': 'url(' + dogInfo?.image + ')',
+                  'background-size': 'cover'
+                }"
+              ></div>
+              <mat-card-title>{{ dogInfo?.breedName }}</mat-card-title>
+              <mat-card-subtitle>{{
+                dogInfo?.dogInfo.breedGroup
+              }}</mat-card-subtitle>
+            </mat-card-header>
+            <p>{{ dogInfo?.description }}</p>
+          </mat-expansion-panel>
         </h3>
-        <mat-icon color="accent">info</mat-icon>
       </div>
-      <p>
-        <!-- {{ dogInfoArr[0][0] | json }} -->
-      </p>
+      <p></p>
     </mat-card-content>
   </mat-card>
 </section>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { mergeMap, takeUntil } from 'rxjs/operators';
+import { mergeMap, switchMap, take, takeUntil } from 'rxjs/operators';
+import { DogImage } from 'src/app/models/DogImage.interface';
 import { DogInfo } from 'src/app/models/DogInfo.interface';
 import { DogCeoService } from 'src/app/services/dog-ceo.service';
 
@@ -13,7 +14,7 @@ export class HomePageComponent implements OnInit {
   randomImage: string = '';
   title: string = '';
   favorited: boolean = false;
-  dogInfoArr: DogInfo[] = [];
+  dogInfo: DogInfo | undefined;
 
   private readonly onDestroy = new Subject<void>();
 
@@ -22,22 +23,23 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
     this.apiService
       .getRandomDog()
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe((x: { message: string }) => {
-        this.randomImage = x.message;
-        this.title = x.message
-          .slice(30)
-          .replace(/\/[\w,.]+/, '')
-          .split('-')
-          .map((x) => x[0].toUpperCase() + x.slice(1))
-          .join(' ');
-        this.apiService
-          .getDogInfo(this.title.split(' ')[0])
-          .pipe(takeUntil(this.onDestroy));
-        // .subscribe((x:Subject<Array<DogInfo>>) => {
-        //   console.log(x);
-        //   return (this.dogInfoArr = x);
-        // });
+      .pipe(
+        take(1),
+        switchMap((dogImage: DogImage, index: number) => {
+          console.log(dogImage, 'dogCEO Image');
+          this.randomImage = dogImage.message;
+          this.title = dogImage.message
+            .slice(30)
+            .replace(/\/[\w,.]+/, '')
+            .split('-')
+            .map((dogImage) => dogImage[0].toUpperCase() + dogImage.slice(1))
+            .join(' ');
+          return this.apiService.getDogInfo(this.title.split(' ')[0]);
+        })
+      )
+      .subscribe((dogInfoArr) => {
+        console.log(dogInfoArr[0]);
+        this.dogInfo = dogInfoArr[0];
       });
   }
 

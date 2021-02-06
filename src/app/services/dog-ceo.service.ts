@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DogImage } from '../models/DogImage.interface';
 import { DogInfo } from '../models/DogInfo.interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,11 +13,11 @@ export class DogCeoService {
 
   constructor(private http: HttpClient) {}
 
-  getRandomDog() {
+  getRandomDog(): Observable<DogImage> {
     return this.http.get<DogImage>(`${this.BASE_URL}breeds/image/random`);
   }
 
-  getDogInfo(breed: string) {
-    return this.http.get<DogInfo>(`${this.BASE_INFO_URL}${breed}`);
+  getDogInfo(breedName: string): Observable<DogInfo[]> {
+    return this.http.get<DogInfo[]>(`${this.BASE_INFO_URL}${breedName}`);
   }
 }

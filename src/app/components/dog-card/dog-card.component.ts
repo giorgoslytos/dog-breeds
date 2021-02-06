@@ -12,7 +12,7 @@ export class DogCardComponent implements OnInit {
   @Input()
   title: string = '';
   @Input()
-  dogInfoArr: DogInfo[] = [];
+  dogInfo: DogInfo | undefined;
   favorited: boolean = false;
 
   constructor() {}
