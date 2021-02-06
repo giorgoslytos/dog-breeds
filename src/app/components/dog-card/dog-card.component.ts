@@ -8,11 +8,13 @@ import { DogInfo } from 'src/app/models/DogInfo.interface';
 })
 export class DogCardComponent implements OnInit {
   @Input()
-  randomImage: string = '';
+  randomImage: string | undefined;
   @Input()
-  title: string = '';
+  title: string | undefined;
   @Input()
   dogInfo: DogInfo | undefined;
+  @Input()
+  dogInfoError: string | undefined;
   favorited: boolean = false;
 
   constructor() {}

@@ -8,13 +8,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DogCeoService {
-  BASE_URL: string = 'https://dog.ceo/api/';
+  // BASE_URL: string = 'https://dog.ceo/api/';
+  BASE_URL: string = 'https://dog.ceo/api/breed/bullterrier/images/random';
   BASE_INFO_URL: string = 'https://api-dog-breeds.herokuapp.com/api/search?q=';
 
   constructor(private http: HttpClient) {}
 
   getRandomDog(): Observable<DogImage> {
-    return this.http.get<DogImage>(`${this.BASE_URL}breeds/image/random`);
+    // return this.http.get<DogImage>(`${this.BASE_URL}breeds/image/random`);
+    return this.http.get<DogImage>(`${this.BASE_URL}`);
   }
 
   getDogInfo(breedName: string): Observable<DogInfo[]> {

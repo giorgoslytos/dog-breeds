@@ -1,6 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { mergeMap, switchMap, take, takeUntil } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import {
+  catchError,
+  map,
+  mergeMap,
+  startWith,
+  switchMap,
+  take,
+  takeUntil,
+} from 'rxjs/operators';
+import { ContentState } from 'src/app/models/ContentState';
 import { DogImage } from 'src/app/models/DogImage.interface';
 import { DogInfo } from 'src/app/models/DogInfo.interface';
 import { DogCeoService } from 'src/app/services/dog-ceo.service';
@@ -15,6 +24,28 @@ export class HomePageComponent implements OnInit {
   title: string = '';
   favorited: boolean = false;
   dogInfo: DogInfo | undefined;
+  dogInfoError: string = '';
+
+  readonly ContentState = ContentState;
+
+  // readonly page$ = this.apiService.getRandomDog().pipe(
+  //   take(1),
+  //   switchMap((dogImage: DogImage, index: number) => {
+  //     this.randomImage = dogImage.message;
+  //     this.title = dogImage.message
+  //       .slice(30)
+  //       .replace(/\/[\w,.]+/, '')
+  //       .split('-')
+  //       .map((dogImage) => dogImage[0].toUpperCase() + dogImage.slice(1))
+  //       .join(' ');
+  //     return this.apiService.getDogInfo(this.title.split(' ')[0]).pipe(
+  //       take(1),
+  //       map((item) => ({ state: ContentState.LOADED, item })),
+  //       startWith({ state: ContentState.LOADING }),
+  //       catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+  //     );
+  //   })
+  // );
 
   private readonly onDestroy = new Subject<void>();
 
@@ -26,7 +57,6 @@ export class HomePageComponent implements OnInit {
       .pipe(
         take(1),
         switchMap((dogImage: DogImage, index: number) => {
-          console.log(dogImage, 'dogCEO Image');
           this.randomImage = dogImage.message;
           this.title = dogImage.message
             .slice(30)
@@ -34,16 +64,14 @@ export class HomePageComponent implements OnInit {
             .split('-')
             .map((dogImage) => dogImage[0].toUpperCase() + dogImage.slice(1))
             .join(' ');
-          return this.apiService.getDogInfo(this.title.split(' ')[0]);
+          return this.apiService
+            .getDogInfo(this.title.split(' ')[0])
+            .pipe(take(1));
         })
       )
-      .subscribe((dogInfoArr) => {
-        console.log(dogInfoArr[0]);
-        this.dogInfo = dogInfoArr[0];
-      });
-  }
-
-  ngOnDestroy() {
-    this.onDestroy.next();
+      .subscribe(
+        (dogInfoArr) => (this.dogInfo = dogInfoArr[0]),
+        (err) => (this.dogInfoError = err.error.error)
+      );
   }
 }
