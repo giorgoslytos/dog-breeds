@@ -1,0 +1,35 @@
+<!--  -->
+<section class="mat-typography">
+  <mat-card class="example-card">
+    <mat-card-header>
+      <mat-card-title>{{ title }}</mat-card-title>
+      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      <div>
+        <button mat-icon-button>
+          <mat-icon color="warn" (click)="favorited = !favorited">{{
+            favorited ? "favorite" : "favorite_border"
+          }}</mat-icon>
+        </button>
+        <button mat-icon-button>
+          <mat-icon color="primary">share</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+    <img mat-card-image src="{{ randomImage }}" alt="Image of {{ title }}" />
+    <mat-card-content>
+      <div fxLayout="row" fxLayoutAlign="space-between">
+        <h3 matLine>
+          <!-- {{
+            dogInfoArr[0].breedName[0].toUpperCase() +
+              dogInfoArr[0].breedName.slice(1)
+          }} -->
+          <!-- {{ dogInfo[0].breedName[0].split(' ').map(word => word[0].toUpperCase()+word.slice(1)).join(' ') }} -->
+        </h3>
+        <mat-icon color="accent">info</mat-icon>
+      </div>
+      <p>
+        <!-- {{ dogInfoArr[0][0] | json }} -->
+      </p>
+    </mat-card-content>
+  </mat-card>
+</section>
