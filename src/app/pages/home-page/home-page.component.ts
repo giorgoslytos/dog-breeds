@@ -30,22 +30,6 @@ export class HomePageComponent implements OnInit {
   dogInfoError: string = '';
   dogImageState: any;
   dogInfoState: any;
-  // dogInfoState?:
-  //   | Observable<{
-  //       state: ContentState;
-  //       item?: DogImage;
-  //       error?: any;
-  //       dogInfo?: DogInfo;
-  //     }>
-  //   | undefined;
-  // dogImageState?:
-  //   | Observable<{
-  //       state: ContentState;
-  //       item?: DogImage;
-  //       error?: any;
-  //       title?: string;
-  //     }>
-  //   | undefined;
 
   private readonly onDestroy = new Subject<void>();
 

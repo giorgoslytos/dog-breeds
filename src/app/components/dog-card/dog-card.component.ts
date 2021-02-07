@@ -11,22 +11,9 @@ import { ContentState } from 'src/app/types/ContentState';
 })
 export class DogCardComponent implements OnInit {
   @Input()
-  dogImageState?:
-    | Observable<{
-        state: ContentState;
-        item?: DogImage;
-        error?: any;
-        title?: string;
-      }>
-    | undefined;
+  dogImageState?: Observable<DogImage> | undefined;
   @Input()
-  dogInfoState?:
-    | Observable<{
-        state: ContentState;
-        item?: DogInfo;
-        error?: any;
-      }>
-    | undefined;
+  dogInfoState?: Observable<DogInfo> | undefined;
 
   favorited: boolean = false;
 
