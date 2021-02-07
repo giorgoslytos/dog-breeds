@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
+import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
+import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { ContentState } from 'src/app/types/ContentState';
 
@@ -11,9 +13,9 @@ import { ContentState } from 'src/app/types/ContentState';
 })
 export class DogCardComponent implements OnInit {
   @Input()
-  dogImageState?: Observable<DogImage> | undefined;
+  dogImageState: Observable<DogImageState> | undefined;
   @Input()
-  dogInfoState?: Observable<DogInfo> | undefined;
+  dogInfoState: Observable<DogInfoState> | undefined;
 
   favorited: boolean = false;
 

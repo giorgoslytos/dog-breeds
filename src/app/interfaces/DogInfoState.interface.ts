@@ -1,8 +1,8 @@
 import { ContentState } from '../types/ContentState';
 import { DogInfo } from './DogInfo.interface';
 
-export interface dogInfoState {
+export interface DogInfoState {
   state: ContentState;
-  item?: DogInfo;
-  error?: string;
+  item: DogInfo;
+  error: string;
 }

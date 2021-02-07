@@ -2,16 +2,15 @@
   <mat-card class="example-card">
     <ng-container
       *ngIf="dogImageState | async as dogImage"
-      [ngSwitch]="dogImage?.state"
+      [ngSwitch]="dogImage.state"
     >
-      {{ dogImage | json }}
       <ng-container *ngSwitchCase="ContentState.LOADING">
         <mat-spinner style="margin: auto"></mat-spinner>
       </ng-container>
       <ng-container *ngSwitchCase="ContentState.ERR"> </ng-container>
       <ng-container *ngSwitchCase="ContentState.LOADED">
         <mat-card-header>
-          <mat-card-title>{{ dogImage?.title }}</mat-card-title>
+          <mat-card-title>{{ dogImage.title }}</mat-card-title>
           <mat-card-subtitle>Dog Breed</mat-card-subtitle>
           <div>
             <button mat-icon-button>
@@ -26,8 +25,8 @@
         </mat-card-header>
         <img
           mat-card-image
-          src="{{ dogImage?.item?.message }}"
-          alt="Image of {{ dogImage?.title }}"
+          src="{{ dogImage.item.message }}"
+          alt="Image of {{ dogImage.title }}"
         />
       </ng-container>
     </ng-container>
@@ -47,37 +46,35 @@
             *ngIf="dogInfoState | async as dogInfo"
             [ngSwitch]="dogInfo.state"
           >
-            {{ dogInfo | json }}
-
             <ng-container *ngSwitchCase="ContentState.LOADED">
               <mat-card-header [ngStyle]="{ 'justify-content': 'left' }">
                 <div
                   mat-card-avatar
                   class="example-header-image"
                   [ngStyle]="{
-                    'background-image': 'url(' + dogInfo?.item?.image + ')',
+                    'background-image': 'url(' + dogInfo.item.image + ')',
                     'background-size': 'cover'
                   }"
                 ></div>
-                <mat-card-title>{{ dogInfo?.item?.breedName }}</mat-card-title>
+                <mat-card-title>{{ dogInfo.item.breedName }}</mat-card-title>
                 <mat-card-subtitle>{{
-                  dogInfo?.item?.dogInfo?.breedGroup
+                  dogInfo.item.dogInfo.breedGroup
                 }}</mat-card-subtitle>
               </mat-card-header>
-              <p>{{ dogInfo?.item?.description }}</p>
+              <p>{{ dogInfo.item.description }}</p>
               <ul [ngStyle]="{ 'list-style-type': 'none' }">
                 <li>
-                  <b>Life Expectancy: </b> {{ dogInfo?.item?.dogInfo?.life }}
+                  <b>Life Expectancy: </b> {{ dogInfo.item.dogInfo.life }}
                 </li>
-                <li><b>Height:</b> {{ dogInfo?.item?.dogInfo?.height }}</li>
-                <li><b>Weight:</b> {{ dogInfo?.item?.dogInfo?.weight }}</li>
+                <li><b>Height:</b> {{ dogInfo.item.dogInfo.height }}</li>
+                <li><b>Weight:</b> {{ dogInfo.item.dogInfo.weight }}</li>
               </ul>
             </ng-container>
             <ng-container *ngSwitchCase="ContentState.LOADING">
               <mat-spinner style="margin: auto"></mat-spinner>
             </ng-container>
             <ng-container *ngSwitchCase="ContentState.ERR">
-              <mat-card-subtitle>{{ dogInfo?.error }} :(</mat-card-subtitle>
+              <mat-card-subtitle>{{ dogInfo.error }} :(</mat-card-subtitle>
             </ng-container>
           </ng-container>
         </mat-expansion-panel>

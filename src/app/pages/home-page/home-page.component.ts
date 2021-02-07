@@ -1,16 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import {
-  catchError,
-  concatMap,
-  concatMapTo,
-  map,
-  mergeMap,
-  startWith,
-  switchMap,
-  take,
-  takeUntil,
-} from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import { catchError, map, startWith } from 'rxjs/operators';
 import { ContentState } from 'src/app/types/ContentState';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';

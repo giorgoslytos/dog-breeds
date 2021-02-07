@@ -1,9 +1,9 @@
 import { ContentState } from '../types/ContentState';
-import { DogInfo } from './DogInfo.interface';
+import { DogImage } from './DogImage.interface';
 
-export interface dogImageState {
+export interface DogImageState {
   state: ContentState;
-  item?: DogInfo;
-  title?: string;
-  error?: string;
+  item: DogImage;
+  title: string;
+  error: string;
 }
