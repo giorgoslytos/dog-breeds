@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DogImage } from '../models/DogImage.interface';
-import { DogInfo } from '../models/DogInfo.interface';
+import { DogImage } from '../interfaces/DogImage.interface';
+import { DogInfo } from '../interfaces/DogInfo.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({

@@ -2,7 +2,7 @@
   <mat-card class="example-card">
     <ng-container
       *ngIf="dogImageState | async as dogImage"
-      [ngSwitch]="dogImage.state"
+      [ngSwitch]="dogImage?.state"
     >
       {{ dogImage | json }}
       <ng-container *ngSwitchCase="ContentState.LOADING">
@@ -55,19 +55,19 @@
                   mat-card-avatar
                   class="example-header-image"
                   [ngStyle]="{
-                    'background-image': 'url(' + dogInfo?.item.image + ')',
+                    'background-image': 'url(' + dogInfo?.item?.image + ')',
                     'background-size': 'cover'
                   }"
                 ></div>
-                <mat-card-title>{{ dogInfo?.item.breedName }}</mat-card-title>
+                <mat-card-title>{{ dogInfo?.item?.breedName }}</mat-card-title>
                 <mat-card-subtitle>{{
-                  dogInfo?.item.dogInfo?.breedGroup
+                  dogInfo?.item?.dogInfo?.breedGroup
                 }}</mat-card-subtitle>
               </mat-card-header>
-              <p>{{ dogInfo?.item.description }}</p>
+              <p>{{ dogInfo?.item?.description }}</p>
               <ul [ngStyle]="{ 'list-style-type': 'none' }">
                 <li>
-                  <b>Life Expectancy: </b> {{ dogInfo?.item.dogInfo?.life }}
+                  <b>Life Expectancy: </b> {{ dogInfo?.item?.dogInfo?.life }}
                 </li>
                 <li><b>Height:</b> {{ dogInfo?.item?.dogInfo?.height }}</li>
                 <li><b>Weight:</b> {{ dogInfo?.item?.dogInfo?.weight }}</li>

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DogInfo } from '../models/DogInfo.interface';
+import { DogInfo } from '../interfaces/DogInfo.interface';
 
 @Pipe({ name: 'titleFormat' })
 export class TitleFormatPipe implements PipeTransform {

@@ -12,8 +12,8 @@ import {
   takeUntil,
 } from 'rxjs/operators';
 import { ContentState } from 'src/app/types/ContentState';
-import { DogImage } from 'src/app/models/DogImage.interface';
-import { DogInfo } from 'src/app/models/DogInfo.interface';
+import { DogImage } from 'src/app/interfaces/DogImage.interface';
+import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogCeoService } from 'src/app/services/dog-ceo.service';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 
@@ -28,23 +28,24 @@ export class HomePageComponent implements OnInit {
   favorited: boolean = false;
   dogInfo: DogInfo | undefined;
   dogInfoError: string = '';
-  // dogImageState: any;
-  dogInfoState?:
-    | Observable<{
-        state: ContentState;
-        item?: DogImage;
-        error?: any;
-        dogInfo?: DogInfo;
-      }>
-    | undefined;
-  dogImageState?:
-    | Observable<{
-        state: ContentState;
-        item?: DogImage;
-        error?: any;
-        title?: string;
-      }>
-    | undefined;
+  dogImageState: any;
+  dogInfoState: any;
+  // dogInfoState?:
+  //   | Observable<{
+  //       state: ContentState;
+  //       item?: DogImage;
+  //       error?: any;
+  //       dogInfo?: DogInfo;
+  //     }>
+  //   | undefined;
+  // dogImageState?:
+  //   | Observable<{
+  //       state: ContentState;
+  //       item?: DogImage;
+  //       error?: any;
+  //       title?: string;
+  //     }>
+  //   | undefined;
 
   private readonly onDestroy = new Subject<void>();
 
@@ -61,7 +62,7 @@ export class HomePageComponent implements OnInit {
                 state: ContentState.LOADED,
                 item: item[0],
               })),
-              startWith({ state: ContentState.LOADING, item: {} }),
+              startWith({ state: ContentState.LOADING }),
               catchError((e) =>
                 of({ state: ContentState.ERR, error: e.message })
               )

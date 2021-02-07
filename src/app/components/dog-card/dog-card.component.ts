@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DogImage } from 'src/app/models/DogImage.interface';
-import { DogInfo } from 'src/app/models/DogInfo.interface';
+import { DogImage } from 'src/app/interfaces/DogImage.interface';
+import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { ContentState } from 'src/app/types/ContentState';
 
 @Component({
@@ -10,14 +10,6 @@ import { ContentState } from 'src/app/types/ContentState';
   styleUrls: ['./dog-card.component.scss'],
 })
 export class DogCardComponent implements OnInit {
-  @Input()
-  randomImage: string | undefined;
-  @Input()
-  title: string | undefined;
-  @Input()
-  dogInfo: DogInfo | undefined;
-  @Input()
-  dogInfoError: string | undefined;
   @Input()
   dogImageState?:
     | Observable<{
@@ -28,7 +20,13 @@ export class DogCardComponent implements OnInit {
       }>
     | undefined;
   @Input()
-  dogInfoState?: any;
+  dogInfoState?:
+    | Observable<{
+        state: ContentState;
+        item?: DogInfo;
+        error?: any;
+      }>
+    | undefined;
 
   favorited: boolean = false;
 
