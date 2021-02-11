@@ -2,7 +2,7 @@
   <div fxLayout="row" fxLayoutAlign="space-around center">
     <div fxLayout="column">
       <section class="mat-typography">
-        <mat-card class="example-card">
+        <mat-card style="max-width: 500px">
           <mat-card-header>
             <mat-card-title>{{ title }}</mat-card-title>
             <mat-card-subtitle>Dog Breed</mat-card-subtitle>
@@ -12,8 +12,8 @@
                   favorited ? "favorite" : "favorite_border"
                 }}</mat-icon>
                 <!-- <mat-icon color="warn" (click)="favorited = !favorited">{{
-                      favorited ? "favorite" : "favorite_border"
-                    }}</mat-icon> -->
+                        favorited ? "favorite" : "favorite_border"
+                      }}</mat-icon> -->
               </button>
               <button mat-icon-button>
                 <mat-icon color="primary">share</mat-icon>
@@ -27,7 +27,7 @@
             alt="Image of {{ title }}"
           />
 
-          <mat-card-content>
+          <mat-card-content [style.overflow]="'auto'">
             <div
               fxLayout="row"
               fxLayoutAlign="space-between"

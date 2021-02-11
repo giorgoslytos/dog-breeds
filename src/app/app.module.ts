@@ -13,7 +13,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { CookieService } from 'ngx-cookie-service';
 import { FavoritesPageComponent } from './pages/favorites-page/favorites-page.component';
 import { DogFromUrlComponent } from './pages/dog-from-url/dog-from-url.component';
-
+import { SocialModalComponent } from './components/social-modal/social-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +22,7 @@ import { DogFromUrlComponent } from './pages/dog-from-url/dog-from-url.component
     HomePageComponent,
     FavoritesPageComponent,
     DogFromUrlComponent,
+    SocialModalComponent,
   ],
   imports: [
     BrowserModule,
