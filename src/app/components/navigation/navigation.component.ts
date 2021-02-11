@@ -1,12 +1,25 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
 })
-export class NavigationComponent implements OnDestroy {
+export class NavigationComponent implements OnDestroy, AfterViewChecked {
+  @ViewChild('toolbar', { read: ElementRef })
+  toolbar: ElementRef | undefined;
+  @ViewChild('footer', { read: ElementRef })
+  footer: ElementRef | undefined;
+  drawerHeight: string = '100%';
+  mainContentHeight: string = '100%';
   mobileQuery: MediaQueryList;
 
   navLinks = [
@@ -20,14 +33,18 @@ export class NavigationComponent implements OnDestroy {
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery.addEventListener('change', this._mobileQueryListener);
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeEventListener('change', this._mobileQueryListener);
   }
 
-  shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some((h) =>
-    h.test(window.location.host)
-  );
+  ngAfterViewChecked(): void {
+    this.drawerHeight = `calc(100vh - ${this.toolbar?.nativeElement.offsetHeight}px`;
+    this.mainContentHeight = `calc(100vh - ${
+      this.toolbar?.nativeElement.offsetHeight +
+      this.footer?.nativeElement.offsetHeight
+    }px`;
+  }
 }

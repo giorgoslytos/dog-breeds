@@ -1,4 +1,4 @@
-<mat-toolbar class="main header" color="primary">
+<mat-toolbar class="main header" color="primary" #toolbar>
   <button mat-icon-button (click)="drawer.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
@@ -31,47 +31,9 @@
     </div>
   </mat-drawer>
 
-  <div class="main contents">
-    <div>
-      <ng-content></ng-content>
-    </div>
+  <div class="main contents" [style.min-height]="mainContentHeight">
+    <ng-content></ng-content>
     <div>&nbsp;</div>
   </div>
-
-  <!-- <mat-toolbar class="main footer" color="primary">
-    all dogs go to heaven!
-  </mat-toolbar> -->
+  <mat-toolbar class="main footer" #footer> Footer </mat-toolbar>
 </mat-drawer-container>
-
-<!-- <mat-sidenav-container autosize>
-  <mat-sidenav
-    #snav
-    [mode]="mobileQuery.matches ? 'over' : 'side'"
-    [fixedInViewport]="mobileQuery.matches"
-    fixedTopGap="56"
-    fullscreen
-  >
-    <mat-toolbar color="primary" class="example-toolbar">
-      <mat-toolbar-row>
-        <button mat-icon-button (click)="snav.toggle()">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <h1 class="example-app-name">fluffy friends!</h1>
-
-        <img
-          src="../../../assets/puppy_looking.svg"
-          alt="doggy"
-          style="filter: invert(1); width: 60px; margin-left: 12px"
-        />
-      </mat-toolbar-row>
-    </mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item [routerLink]="nav.path" *ngFor="let nav of navLinks"
-        ><mat-icon color="primary">{{ nav.icon }}</mat-icon>
-        <span [style.marginLeft.px]="16">
-          {{ nav.title }}
-        </span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
-</mat-sidenav-container> -->
