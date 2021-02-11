@@ -3,6 +3,6 @@ import { DogInfo } from './DogInfo.interface';
 
 export interface DogInfoState {
   state: ContentState;
-  item: DogInfo;
-  error: string;
+  item?: DogInfo;
+  error?: string;
 }

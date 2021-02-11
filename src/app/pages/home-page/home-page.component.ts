@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { of, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
 import { ContentState } from 'src/app/types/ContentState';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogCeoService } from 'src/app/services/dog-ceo.service';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
+import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 
 @Component({
   selector: 'app-home-page',
@@ -19,7 +20,7 @@ export class HomePageComponent implements OnInit {
   dogInfo: DogInfo | undefined;
   dogInfoError: string = '';
   dogImageState: any;
-  dogInfoState: any;
+  dogInfoState: Observable<DogInfoState> | undefined;
 
   private readonly onDestroy = new Subject<void>();
 

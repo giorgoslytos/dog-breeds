@@ -10,9 +10,19 @@ import { DogCardComponent } from './components/dog-card/dog-card.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
+import { CookieService } from 'ngx-cookie-service';
+import { FavoritesPageComponent } from './pages/favorites-page/favorites-page.component';
+import { DogFromUrlComponent } from './pages/dog-from-url/dog-from-url.component';
 
 @NgModule({
-  declarations: [AppComponent, DogCardComponent, NavigationComponent, HomePageComponent],
+  declarations: [
+    AppComponent,
+    DogCardComponent,
+    NavigationComponent,
+    HomePageComponent,
+    FavoritesPageComponent,
+    DogFromUrlComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -21,7 +31,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
     BrowserAnimationsModule,
     FlexLayoutModule,
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,97 @@
+<div class="container" [style.marginTop.px]="50">
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div fxLayout="column">
+      <section class="mat-typography">
+        <mat-card class="example-card">
+          <mat-card-header>
+            <mat-card-title>{{ title }}</mat-card-title>
+            <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+            <div>
+              <button mat-icon-button>
+                <mat-icon color="warn" (click)="handleFavorite()">{{
+                  favorited ? "favorite" : "favorite_border"
+                }}</mat-icon>
+                <!-- <mat-icon color="warn" (click)="favorited = !favorited">{{
+                      favorited ? "favorite" : "favorite_border"
+                    }}</mat-icon> -->
+              </button>
+              <button mat-icon-button>
+                <mat-icon color="primary">share</mat-icon>
+              </button>
+            </div>
+          </mat-card-header>
+          <img
+            mat-card-image
+            #imageURLEl
+            src="{{ dogLink }}"
+            alt="Image of {{ title }}"
+          />
+
+          <mat-card-content>
+            <div
+              fxLayout="row"
+              fxLayoutAlign="space-between"
+              style="width: 100%"
+            >
+              <mat-expansion-panel hideToggle style="width: 100%">
+                <mat-expansion-panel-header>
+                  <mat-icon color="accent">info</mat-icon>
+                  <mat-panel-title>info</mat-panel-title>
+                  <mat-panel-description>
+                    This or a related breed
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <!-- DOG INFO -->
+                <ng-container
+                  *ngIf="dogInfoState | async as dogInfo"
+                  [ngSwitch]="dogInfo.state"
+                >
+                  <ng-container *ngSwitchCase="ContentState.LOADED">
+                    <mat-card-header [ngStyle]="{ 'justify-content': 'left' }">
+                      <div
+                        mat-card-avatar
+                        class="example-header-image"
+                        [ngStyle]="{
+                          'background-image':
+                            'url(' + dogInfo.item?.image + ')',
+                          'background-size': 'cover'
+                        }"
+                      ></div>
+                      <mat-card-title>{{
+                        dogInfo.item?.breedName
+                      }}</mat-card-title>
+                      <mat-card-subtitle>{{
+                        dogInfo.item?.dogInfo?.breedGroup
+                      }}</mat-card-subtitle>
+                    </mat-card-header>
+                    <p>{{ dogInfo.item?.description }}</p>
+                    <ul [ngStyle]="{ 'list-style-type': 'none' }">
+                      <li>
+                        <b>Life Expectancy: </b>
+                        {{ dogInfo.item?.dogInfo?.life }}
+                      </li>
+                      <li>
+                        <b>Height:</b> {{ dogInfo.item?.dogInfo?.height }}
+                      </li>
+                      <li>
+                        <b>Weight:</b> {{ dogInfo.item?.dogInfo?.weight }}
+                      </li>
+                    </ul>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="ContentState.LOADING">
+                    <mat-spinner style="margin: auto"></mat-spinner>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="ContentState.ERR">
+                    <mat-card-subtitle
+                      >{{ dogInfo.error }} :(</mat-card-subtitle
+                    >
+                  </ng-container>
+                </ng-container>
+              </mat-expansion-panel>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </section>
+    </div>
+  </div>
+</div>

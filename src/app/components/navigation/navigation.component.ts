@@ -12,6 +12,7 @@ export class NavigationComponent implements OnDestroy {
   navLinks = [
     { title: 'Home', path: '/home', icon: 'home' },
     { title: 'Breeds', path: '/breeds', icon: 'pets' },
+    { title: 'Favorites', path: '/favorites', icon: 'pets' },
   ];
 
   private _mobileQueryListener: () => void;

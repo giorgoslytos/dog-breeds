@@ -1,4 +1,5 @@
 export interface DogInfo {
+  message: any;
   breedName: string;
   image: string;
   description: string;

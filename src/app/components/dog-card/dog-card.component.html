@@ -14,9 +14,12 @@
           <mat-card-subtitle>Dog Breed</mat-card-subtitle>
           <div>
             <button mat-icon-button>
-              <mat-icon color="warn" (click)="favorited = !favorited">{{
+              <mat-icon color="warn" (click)="handleFavorite()">{{
                 favorited ? "favorite" : "favorite_border"
               }}</mat-icon>
+              <!-- <mat-icon color="warn" (click)="favorited = !favorited">{{
+                favorited ? "favorite" : "favorite_border"
+              }}</mat-icon> -->
             </button>
             <button mat-icon-button>
               <mat-icon color="primary">share</mat-icon>
@@ -25,6 +28,7 @@
         </mat-card-header>
         <img
           mat-card-image
+          #imageURLEl
           src="{{ dogImage.item.message }}"
           alt="Image of {{ dogImage.title }}"
         />
@@ -52,22 +56,22 @@
                   mat-card-avatar
                   class="example-header-image"
                   [ngStyle]="{
-                    'background-image': 'url(' + dogInfo.item.image + ')',
+                    'background-image': 'url(' + dogInfo.item?.image + ')',
                     'background-size': 'cover'
                   }"
                 ></div>
-                <mat-card-title>{{ dogInfo.item.breedName }}</mat-card-title>
+                <mat-card-title>{{ dogInfo.item?.breedName }}</mat-card-title>
                 <mat-card-subtitle>{{
-                  dogInfo.item.dogInfo.breedGroup
+                  dogInfo.item?.dogInfo?.breedGroup
                 }}</mat-card-subtitle>
               </mat-card-header>
-              <p>{{ dogInfo.item.description }}</p>
+              <p>{{ dogInfo.item?.description }}</p>
               <ul [ngStyle]="{ 'list-style-type': 'none' }">
                 <li>
-                  <b>Life Expectancy: </b> {{ dogInfo.item.dogInfo.life }}
+                  <b>Life Expectancy: </b> {{ dogInfo.item?.dogInfo?.life }}
                 </li>
-                <li><b>Height:</b> {{ dogInfo.item.dogInfo.height }}</li>
-                <li><b>Weight:</b> {{ dogInfo.item.dogInfo.weight }}</li>
+                <li><b>Height:</b> {{ dogInfo.item?.dogInfo?.height }}</li>
+                <li><b>Weight:</b> {{ dogInfo.item?.dogInfo?.weight }}</li>
               </ul>
             </ng-container>
             <ng-container *ngSwitchCase="ContentState.LOADING">
