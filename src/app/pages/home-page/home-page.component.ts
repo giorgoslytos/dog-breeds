@@ -7,6 +7,7 @@ import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogCeoService } from 'src/app/services/dog-ceo.service';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
+import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 
 @Component({
   selector: 'app-home-page',
@@ -19,7 +20,7 @@ export class HomePageComponent implements OnInit {
   favorited: boolean = false;
   dogInfo: DogInfo | undefined;
   dogInfoError: string = '';
-  dogImageState: any;
+  dogImageState: Observable<DogImageState> | undefined;
   dogInfoState: Observable<DogInfoState> | undefined;
 
   private readonly onDestroy = new Subject<void>();
@@ -49,7 +50,7 @@ export class HomePageComponent implements OnInit {
           }
         )
       ),
-      startWith({ state: ContentState.LOADING, title: '' }),
+      startWith({ state: ContentState.LOADING }),
       catchError((e) => of({ state: ContentState.ERR, error: e.message }))
     );
   }

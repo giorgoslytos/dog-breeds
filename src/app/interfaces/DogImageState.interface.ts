@@ -3,7 +3,7 @@ import { DogImage } from './DogImage.interface';
 
 export interface DogImageState {
   state: ContentState;
-  item: DogImage;
-  title: string;
-  error: string;
+  item?: DogImage;
+  title?: string;
+  error?: string;
 }

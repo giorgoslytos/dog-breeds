@@ -1,4 +1,4 @@
-<mat-card class="example-card">
+<mat-card [style.maxWidth]="'400px'" [style.margin]="'2rem'">
   <ng-container
     *ngIf="dogImageState | async as dogImage"
     [ngSwitch]="dogImage.state"
@@ -16,9 +16,6 @@
             <mat-icon color="warn" (click)="handleFavorite()">{{
               favorited ? "favorite" : "favorite_border"
             }}</mat-icon>
-            <!-- <mat-icon color="warn" (click)="favorited = !favorited">{{
-                favorited ? "favorite" : "favorite_border"
-              }}</mat-icon> -->
           </button>
           <button mat-icon-button>
             <mat-icon color="primary">share</mat-icon>
@@ -28,7 +25,7 @@
       <img
         mat-card-image
         #imageURLEl
-        src="{{ dogImage.item.message }}"
+        src="{{ dogImage.item?.message }}"
         alt="Image of {{ dogImage.title }}"
       />
     </ng-container>
