@@ -31,7 +31,12 @@
     </div>
   </mat-drawer>
 
-  <div class="main contents" [style.min-height]="mainContentHeight">
+  <div
+    class="main contents"
+    [style.min-height]="
+      mobileQuery.matches ? 'calc(100vh - 112px)' : 'calc(100vh - 128px)'
+    "
+  >
     <ng-content></ng-content>
   </div>
   <mat-toolbar class="main footer" #footer color="primary">
