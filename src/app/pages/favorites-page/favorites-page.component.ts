@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
+import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
@@ -15,8 +16,9 @@ import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 })
 export class FavoritesPageComponent implements OnInit {
   cookiesArr: string[] = [];
-  // dogInfoState: Observable<DogInfoState[]> | undefined;
-  dogInfoState: Observable<any>[] = [];
+  dogImageState: Observable<DogImageState> | undefined;
+  dogInfoState: Observable<DogInfoState> | undefined;
+  dogsAllArr: any;
 
   constructor(
     private cookie: CookieService,
@@ -27,19 +29,35 @@ export class FavoritesPageComponent implements OnInit {
     if (this.cookie.check('favorite')) {
       this.cookiesArr = JSON.parse(this.cookie.get('favorite'));
     }
-    this.cookiesArr.forEach((imageURL) =>
-      this.apiService
-        .getDogInfo(exportTitleFromURL(imageURL).split(' ')[0])
-        .pipe(
-          map((item: DogInfo[]) => ({
-            state: ContentState.LOADED,
-            item: item[0],
-          })),
-          startWith({ state: ContentState.LOADING }),
-          catchError((e) => of({ state: ContentState.ERR, error: e.message }))
-        )
-        .subscribe((dogInfo) => console.log(dogInfo))
-    );
-    console.log(this.dogInfoState);
+    this.dogsAllArr = this.cookiesArr.map((dogLink: string) => {
+      const title: string = exportTitleFromURL(dogLink).split(' ')[0];
+      const dogImageState = from([
+        {
+          state: ContentState.LOADED,
+          item: { message: dogLink, status: 'success' },
+          title,
+        },
+      ]).pipe(
+        startWith({ state: ContentState.LOADING }),
+        catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+      );
+      const dogInfoState = this.apiService.getDogInfo(title).pipe(
+        map((item: DogInfo[]) => ({
+          state: ContentState.LOADED,
+          item:
+            item.filter((dog) => dog.breedName === title.toLowerCase())[0] ||
+            item.filter(
+              (dog) => dog.dogInfo.breedGroup !== 'mixed breed dogs'
+            )[0] ||
+            item[0],
+        })),
+        startWith({ state: ContentState.LOADING }),
+        catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+      );
+      return {
+        dogImageState,
+        dogInfoState,
+      };
+    });
   }
 }

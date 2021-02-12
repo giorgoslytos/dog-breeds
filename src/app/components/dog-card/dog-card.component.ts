@@ -29,7 +29,6 @@ export class DogCardComponent implements OnInit {
   ngOnInit() {
     if (this.cookie.check('favorite')) {
       this.cookiesArr = JSON.parse(this.cookie.get('favorite'));
-      console.log(this.cookiesArr);
     }
   }
 
