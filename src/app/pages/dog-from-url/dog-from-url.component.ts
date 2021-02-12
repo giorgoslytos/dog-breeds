@@ -6,7 +6,7 @@ import { catchError, map, startWith } from 'rxjs/operators';
 import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
-import { DogCeoService } from 'src/app/services/dog-ceo.service';
+import { DogApiService } from 'src/app/services/dog-api.service';
 import { ContentState } from 'src/app/types/ContentState';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 
@@ -23,13 +23,13 @@ export class DogFromUrlComponent implements OnInit {
 
   ContentState = ContentState;
   // private mockData: string =
-  //   'https://images.dog.ceo/breeds/pomeranian/n02112018_3812.jpg';
+  //   'https://images.dog.ceo/breeds/poodle-miniature/n02113712_9573.jpg';
   dogInfoState: Observable<DogInfoState> | undefined;
   dogImageState: Observable<DogImageState> | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: DogCeoService,
+    private apiService: DogApiService,
     private cookie: CookieService
   ) {
     this.route.params.subscribe((params) => (this.dogLink = atob(params.id)));
@@ -50,7 +50,12 @@ export class DogFromUrlComponent implements OnInit {
     this.dogInfoState = this.apiService.getDogInfo(title).pipe(
       map((item: DogInfo[]) => ({
         state: ContentState.LOADED,
-        item: item[0],
+        item:
+          item.filter((dog) => dog.breedName === title.toLowerCase())[0] ||
+          item.filter(
+            (dog) => dog.dogInfo.breedGroup !== 'mixed breed dogs'
+          )[0] ||
+          item[0],
       })),
       startWith({ state: ContentState.LOADING }),
       catchError((e) => of({ state: ContentState.ERR, error: e.message }))

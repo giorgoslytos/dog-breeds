@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
-import { DogCeoService } from 'src/app/services/dog-ceo.service';
+import { DogApiService } from 'src/app/services/dog-api.service';
 import { ContentState } from 'src/app/types/ContentState';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 
@@ -20,7 +20,7 @@ export class FavoritesPageComponent implements OnInit {
 
   constructor(
     private cookie: CookieService,
-    private apiService: DogCeoService
+    private apiService: DogApiService
   ) {}
 
   ngOnInit() {

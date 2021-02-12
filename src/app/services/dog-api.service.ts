@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class DogCeoService {
+export class DogApiService {
   BASE_URL: string = 'https://dog.ceo/api/';
   // BASE_URL: string = 'https://dog.ceo/api/breed/bullterrier/images/random';
   BASE_INFO_URL: string = 'https://api-dog-breeds.herokuapp.com/api/search?q=';

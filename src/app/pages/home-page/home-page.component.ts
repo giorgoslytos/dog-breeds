@@ -4,7 +4,7 @@ import { catchError, map, startWith } from 'rxjs/operators';
 import { ContentState } from 'src/app/types/ContentState';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
-import { DogCeoService } from 'src/app/services/dog-ceo.service';
+import { DogApiService } from 'src/app/services/dog-api.service';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
@@ -25,18 +25,29 @@ export class HomePageComponent implements OnInit {
 
   private readonly onDestroy = new Subject<void>();
 
-  constructor(private apiService: DogCeoService) {}
+  constructor(private apiService: DogApiService) {}
 
   ngOnInit(): void {
     this.dogImageState = this.apiService.getRandomDog().pipe(
       map(
-        (item: DogImage) => (
+        (dogImage: DogImage) => (
           (this.dogInfoState = this.apiService
-            .getDogInfo(exportTitleFromURL(item.message).split(' ')[0])
+            .getDogInfo(exportTitleFromURL(dogImage.message).split(' ')[0])
             .pipe(
-              map((item: DogInfo[]) => ({
+              map((dogInfo: DogInfo[]) => ({
                 state: ContentState.LOADED,
-                item: item[0],
+                item:
+                  dogInfo.filter(
+                    (dog) =>
+                      dog.breedName ===
+                      exportTitleFromURL(dogImage.message)
+                        .split(' ')[0]
+                        .toLowerCase()
+                  )[0] ||
+                  dogInfo.filter(
+                    (dog) => dog.dogInfo.breedGroup !== 'mixed breed dogs'
+                  )[0] ||
+                  dogInfo[0],
               })),
               startWith({ state: ContentState.LOADING }),
               catchError((e) =>
@@ -45,8 +56,8 @@ export class HomePageComponent implements OnInit {
             )),
           {
             state: ContentState.LOADED,
-            item,
-            title: exportTitleFromURL(item.message),
+            item: dogImage,
+            title: exportTitleFromURL(dogImage.message),
           }
         )
       ),

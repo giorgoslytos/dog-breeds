@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { switchMap, take, takeUntil } from 'rxjs/operators';
 import { DogImage } from './interfaces/DogImage.interface';
 import { DogInfo } from './interfaces/DogInfo.interface';
-import { DogCeoService } from './services/dog-ceo.service';
+import { DogApiService } from './services/dog-api.service';
 
 @Component({
   selector: 'app-root',
