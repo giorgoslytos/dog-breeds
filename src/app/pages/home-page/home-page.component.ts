@@ -28,6 +28,10 @@ export class HomePageComponent implements OnInit {
   constructor(private apiService: DogApiService) {}
 
   ngOnInit(): void {
+    this.getDogFromApi();
+  }
+
+  getDogFromApi() {
     this.dogImageState = this.apiService.getRandomDog().pipe(
       map(
         (dogImage: DogImage) => (
@@ -64,5 +68,8 @@ export class HomePageComponent implements OnInit {
       startWith({ state: ContentState.LOADING }),
       catchError((e) => of({ state: ContentState.ERR, error: e.message }))
     );
+  }
+  getAnotherDog() {
+    this.getDogFromApi();
   }
 }

@@ -1,5 +1,13 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  EventEmitter,
+} from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
 import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
@@ -17,21 +25,36 @@ export class DogCardComponent implements OnInit {
   dogImageState: Observable<DogImageState> | undefined;
   @Input()
   dogInfoState: Observable<DogInfoState> | undefined;
+  @Input()
+  favoritesMode: boolean = false;
   @ViewChild('imageURLEl', { static: false })
-  // imageURLEl!: HTMLImageElement;
   imageURLEl!: ElementRef;
 
-  cookiesArr: string[] = [];
+  @Output()
+  removeFromFavorites: EventEmitter<string> = new EventEmitter<string>();
+
+  @Output()
+  getAnotherDog: EventEmitter<string> = new EventEmitter<string>();
+
   favorited: boolean = false;
 
+  cookiesArr: string[] = [];
+
   ContentState = ContentState;
+
   constructor(private cookie: CookieService) {}
   ngOnInit() {
     if (this.cookie.check('favorite')) {
       this.cookiesArr = JSON.parse(this.cookie.get('favorite'));
     }
+    this.favorited = this.favoritesMode;
   }
 
+  ngOnChanges(changes: DogImageState): void {
+    console.log(changes);
+    console.log('changes');
+    this.favorited = false;
+  }
   handleFavorite() {
     if (!this.favorited) {
       this.cookiesArr.push(this.imageURLEl.nativeElement.src);
@@ -41,6 +64,7 @@ export class DogCardComponent implements OnInit {
         (x) => x !== this.imageURLEl.nativeElement.src
       );
       this.favorited = false;
+      this.removeFromFavorites.emit(this.imageURLEl.nativeElement.src);
     }
     this.cookie.set('favorite', JSON.stringify(this.cookiesArr));
   }

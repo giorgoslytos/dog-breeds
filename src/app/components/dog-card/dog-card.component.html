@@ -1,4 +1,4 @@
-<mat-card [style.maxWidth]="'400px'" [style.margin]="'2rem'">
+<mat-card [style.maxWidth]="'400px'" class="mat-card">
   <ng-container
     *ngIf="dogImageState | async as dogImage"
     [ngSwitch]="dogImage.state"
@@ -12,6 +12,14 @@
         <mat-card-title>{{ dogImage.title }}</mat-card-title>
         <mat-card-subtitle>Dog Breed</mat-card-subtitle>
         <div>
+          <button
+            mat-icon-button
+            color="primary"
+            *ngIf="!favoritesMode"
+            (click)="getAnotherDog.emit()"
+          >
+            <mat-icon>cached</mat-icon>
+          </button>
           <button mat-icon-button>
             <mat-icon color="warn" (click)="handleFavorite()">{{
               favorited ? "favorite" : "favorite_border"
