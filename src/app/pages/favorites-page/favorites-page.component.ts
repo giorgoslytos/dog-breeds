@@ -45,7 +45,7 @@ export class FavoritesPageComponent implements OnInit {
     }
     this.cookiesArr = this.favoritesService.cookiesArr;
     this.dogsAllArr = this.cookiesArr.map((dogLink: string) => {
-      const title: string = exportTitleFromURL(dogLink).split(' ')[0];
+      const title: string = exportTitleFromURL(dogLink);
       const dogImageState = from([
         {
           state: ContentState.LOADED,
