@@ -56,11 +56,13 @@ export class FavoritesPageComponent implements OnInit {
         startWith({ state: ContentState.LOADING }),
         catchError((e) => of({ state: ContentState.ERR, error: e.message }))
       );
-      const dogInfoState = this.apiService.getDogInfo(title).pipe(
+      const dogInfoState = this.apiService.getDogInfo(title.split(' ')[0]).pipe(
         map((item: DogInfo[]) => ({
           state: ContentState.LOADED,
           item:
-            item.filter((dog) => dog.breedName === title.toLowerCase())[0] ||
+            item.filter(
+              (dog) => dog.breedName === title.split(' ')[0].toLowerCase()
+            )[0] ||
             item.filter(
               (dog) => dog.dogInfo.breedGroup !== 'mixed breed dogs'
             )[0] ||
