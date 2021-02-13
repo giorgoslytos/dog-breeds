@@ -14,6 +14,7 @@ import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
+import { FavoritesService } from 'src/app/services/favorites.service';
 import { ContentState } from 'src/app/types/ContentState';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 
@@ -23,7 +24,7 @@ import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
   styleUrls: ['./favorites-page.component.scss'],
 })
 export class FavoritesPageComponent implements OnInit {
-  cookiesArr: string[] = [];
+  cookiesArr: string[] | undefined;
   dogImageState: Observable<DogImageState> | undefined;
   dogInfoState: Observable<DogInfoState> | undefined;
   dogsAllArr:
@@ -34,14 +35,15 @@ export class FavoritesPageComponent implements OnInit {
     | undefined;
 
   constructor(
-    private cookie: CookieService,
-    private apiService: DogApiService
+    private apiService: DogApiService,
+    private favoritesService: FavoritesService
   ) {}
 
   ngOnInit() {
-    if (this.cookie.check('favorite')) {
-      this.cookiesArr = JSON.parse(this.cookie.get('favorite'));
+    if (!this.cookiesArr) {
+      this.favoritesService.fetchFavoritesCookieArr();
     }
+    this.cookiesArr = this.favoritesService.cookiesArr;
     this.dogsAllArr = this.cookiesArr.map((dogLink: string) => {
       const title: string = exportTitleFromURL(dogLink).split(' ')[0];
       const dogImageState = from([
@@ -75,12 +77,16 @@ export class FavoritesPageComponent implements OnInit {
   }
 
   removeFromFavorites(imgUrl: string) {
-    let abc = this.dogsAllArr?.filter((x) =>
-      x.dogImageState.pipe(
-        map((x) => (x.item?.message === imgUrl ? false : true)),
-        reduce((acc, curr) => acc || curr)
-      )
-    );
-    console.log(abc);
+    // timeout is not need it. It just adds allows the heart of favorited
+    // to be emptied, thus offering a better UX
+    setTimeout(() => {
+      this.dogsAllArr = this.dogsAllArr?.filter((x) => {
+        let result;
+        x.dogImageState.subscribe(
+          (dogImage) => (result = dogImage.item?.message !== imgUrl)
+        );
+        return result;
+      });
+    }, 200);
   }
 }

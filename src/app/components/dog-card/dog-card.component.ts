@@ -67,6 +67,7 @@ export class DogCardComponent implements OnInit {
       this.favorited = this.favoritesService.removeFavorite(
         this.imageURLEl.nativeElement.src
       );
+      this.removeFromFavorites.emit(this.imageURLEl.nativeElement.src);
     }
   }
 }
