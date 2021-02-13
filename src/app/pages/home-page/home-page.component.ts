@@ -45,6 +45,15 @@ export class HomePageComponent implements OnInit {
                     (dog) =>
                       dog.breedName ===
                       exportTitleFromURL(dogImage.message)
+                        .split(' ')
+                        .reverse()
+                        .join(' ')
+                        .toLowerCase()
+                  )[0] ||
+                  dogInfo.filter(
+                    (dog) =>
+                      dog.breedName ===
+                      exportTitleFromURL(dogImage.message)
                         .split(' ')[0]
                         .toLowerCase()
                   )[0] ||

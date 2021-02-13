@@ -61,6 +61,11 @@ export class FavoritesPageComponent implements OnInit {
           state: ContentState.LOADED,
           item:
             item.filter(
+              (dog) =>
+                dog.breedName ===
+                title.split(' ').reverse().join(' ').toLowerCase()
+            )[0] ||
+            item.filter(
               (dog) => dog.breedName === title.split(' ')[0].toLowerCase()
             )[0] ||
             item.filter(
