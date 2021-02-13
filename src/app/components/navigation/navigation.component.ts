@@ -1,16 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import {
-  AfterViewChecked,
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { from, Observable, merge } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-navigation',

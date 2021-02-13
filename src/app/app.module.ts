@@ -14,6 +14,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { FavoritesPageComponent } from './pages/favorites-page/favorites-page.component';
 import { DogFromUrlComponent } from './pages/dog-from-url/dog-from-url.component';
 import { SocialModalComponent } from './components/social-modal/social-modal.component';
+import { FavoritesService } from './services/favorites.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,7 @@ import { SocialModalComponent } from './components/social-modal/social-modal.com
     BrowserAnimationsModule,
     FlexLayoutModule,
   ],
-  providers: [CookieService],
+  providers: [CookieService, FavoritesService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,7 +1,9 @@
 <div fxLayout="row wrap" fxLayoutAlign="space-around start">
   <app-dog-card
     *ngFor="let dog of dogsAllArr"
+    [favoritesMode]="true"
     [dogImageState]="dog.dogImageState"
     [dogInfoState]="dog.dogInfoState"
+    (removeFromFavorites)="removeFromFavorites($event)"
   ></app-dog-card>
 </div>

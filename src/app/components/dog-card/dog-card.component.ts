@@ -14,6 +14,7 @@ import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { ContentState } from 'src/app/types/ContentState';
 import { CookieService } from 'ngx-cookie-service';
+import { FavoritesService } from 'src/app/services/favorites.service';
 
 @Component({
   selector: 'app-dog-card',
@@ -42,11 +43,13 @@ export class DogCardComponent implements OnInit {
 
   ContentState = ContentState;
 
-  constructor(private cookie: CookieService) {}
+  constructor(
+    private cookie: CookieService,
+    private favoritesService: FavoritesService
+  ) {}
   ngOnInit() {
-    if (this.cookie.check('favorite')) {
-      this.cookiesArr = JSON.parse(this.cookie.get('favorite'));
-    }
+    this.favoritesService.fetchFavoritesCookieArr();
+    this.cookiesArr = this.favoritesService.cookiesArr;
     this.favorited = this.favoritesMode;
   }
 
@@ -57,15 +60,13 @@ export class DogCardComponent implements OnInit {
   }
   handleFavorite() {
     if (!this.favorited) {
-      this.cookiesArr.push(this.imageURLEl.nativeElement.src);
-      this.favorited = true;
-    } else {
-      this.cookiesArr = this.cookiesArr.filter(
-        (x) => x !== this.imageURLEl.nativeElement.src
+      this.favorited = this.favoritesService.addFavorite(
+        this.imageURLEl.nativeElement.src
       );
-      this.favorited = false;
-      this.removeFromFavorites.emit(this.imageURLEl.nativeElement.src);
+    } else {
+      this.favorited = this.favoritesService.removeFavorite(
+        this.imageURLEl.nativeElement.src
+      );
     }
-    this.cookie.set('favorite', JSON.stringify(this.cookiesArr));
   }
 }

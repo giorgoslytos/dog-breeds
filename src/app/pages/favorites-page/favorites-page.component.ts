@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { from, Observable, of } from 'rxjs';
-import { catchError, map, startWith } from 'rxjs/operators';
+import {
+  catchError,
+  filter,
+  map,
+  mergeMap,
+  reduce,
+  scan,
+  startWith,
+} from 'rxjs/operators';
 import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
@@ -18,7 +26,12 @@ export class FavoritesPageComponent implements OnInit {
   cookiesArr: string[] = [];
   dogImageState: Observable<DogImageState> | undefined;
   dogInfoState: Observable<DogInfoState> | undefined;
-  dogsAllArr: any;
+  dogsAllArr:
+    | {
+        dogImageState: Observable<DogImageState>;
+        dogInfoState: Observable<DogInfoState>;
+      }[]
+    | undefined;
 
   constructor(
     private cookie: CookieService,
@@ -59,5 +72,15 @@ export class FavoritesPageComponent implements OnInit {
         dogInfoState,
       };
     });
+  }
+
+  removeFromFavorites(imgUrl: string) {
+    let abc = this.dogsAllArr?.filter((x) =>
+      x.dogImageState.pipe(
+        map((x) => (x.item?.message === imgUrl ? false : true)),
+        reduce((acc, curr) => acc || curr)
+      )
+    );
+    console.log(abc);
   }
 }
