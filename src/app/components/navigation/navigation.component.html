@@ -39,7 +39,14 @@
   >
     <ng-content></ng-content>
   </div>
-  <mat-toolbar class="main footer" #footer color="primary">
-    remember... All dogs go to heaven!
+  <mat-toolbar
+    class="main footer"
+    #footer
+    color="primary"
+    fxLayout="row"
+    fxLayoutAlign="space-between center"
+  >
+    <span> - hi doggie!</span>
+    <span>© 2021</span>
   </mat-toolbar>
 </mat-drawer-container>

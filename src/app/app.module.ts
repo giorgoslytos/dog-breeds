@@ -15,6 +15,7 @@ import { FavoritesPageComponent } from './pages/favorites-page/favorites-page.co
 import { DogFromUrlComponent } from './pages/dog-from-url/dog-from-url.component';
 import { SocialModalComponent } from './components/social-modal/social-modal.component';
 import { FavoritesService } from './services/favorites.service';
+import { BreedsPageComponent } from './pages/breeds-page/breeds-page.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +25,7 @@ import { FavoritesService } from './services/favorites.service';
     FavoritesPageComponent,
     DogFromUrlComponent,
     SocialModalComponent,
+    BreedsPageComponent,
   ],
   imports: [
     BrowserModule,

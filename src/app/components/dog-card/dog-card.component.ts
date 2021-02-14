@@ -30,25 +30,15 @@ export class DogCardComponent implements OnInit {
   favoritesMode: boolean = false;
   @ViewChild('imageURLEl', { static: false })
   imageURLEl!: ElementRef;
-
-  @Output()
-  removeFromFavorites: EventEmitter<string> = new EventEmitter<string>();
-
   @Output()
   getAnotherDog: EventEmitter<string> = new EventEmitter<string>();
 
   favorited: boolean = false;
-
   cookiesArr: string[] = [];
-
   ContentState = ContentState;
 
-  constructor(
-    private cookie: CookieService,
-    private favoritesService: FavoritesService
-  ) {}
+  constructor(private favoritesService: FavoritesService) {}
   ngOnInit() {
-    this.favoritesService.fetchFavoritesCookieArr();
     this.cookiesArr = this.favoritesService.cookiesArr;
     this.favorited = this.favoritesMode;
   }
@@ -67,7 +57,6 @@ export class DogCardComponent implements OnInit {
       this.favorited = this.favoritesService.removeFavorite(
         this.imageURLEl.nativeElement.src
       );
-      this.removeFromFavorites.emit(this.imageURLEl.nativeElement.src);
     }
   }
 }
