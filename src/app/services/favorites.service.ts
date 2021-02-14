@@ -1,10 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { from, Observable, of } from 'rxjs';
+import { from, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
-import { DogImageState } from '../interfaces/DogImageState.interface';
 import { DogInfo } from '../interfaces/DogInfo.interface';
-import { DogInfoState } from '../interfaces/DogInfoState.interface';
 import { DogsAllInfo } from '../interfaces/DogsAllInfo.interface';
 import { ContentState } from '../types/ContentState';
 import { exportTitleFromURL } from '../utils/exportTitleFromURL';

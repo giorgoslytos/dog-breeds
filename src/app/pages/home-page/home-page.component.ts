@@ -4,10 +4,10 @@ import { catchError, map, startWith } from 'rxjs/operators';
 import { ContentState } from 'src/app/types/ContentState';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
-import { DogApiService } from 'src/app/services/dog-api.service';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
+import { DogApiService } from 'src/app/services/dog-api.service';
 
 @Component({
   selector: 'app-home-page',

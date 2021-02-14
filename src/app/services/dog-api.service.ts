@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { DogImage } from '../interfaces/DogImage.interface';
 import { DogInfo } from '../interfaces/DogInfo.interface';
 import { Observable } from 'rxjs';
+import { BreedList } from '../interfaces/BreedList.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +22,9 @@ export class DogApiService {
 
   getDogInfo(breedName: string): Observable<DogInfo[]> {
     return this.http.get<DogInfo[]>(`${this.BASE_INFO_URL}${breedName}`);
+  }
+
+  getBreedList(): Observable<BreedList> {
+    return this.http.get<BreedList>(`${this.BASE_URL}breeds/list/all`);
   }
 }

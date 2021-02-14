@@ -16,6 +16,8 @@ import { DogFromUrlComponent } from './pages/dog-from-url/dog-from-url.component
 import { SocialModalComponent } from './components/social-modal/social-modal.component';
 import { FavoritesService } from './services/favorites.service';
 import { BreedsPageComponent } from './pages/breeds-page/breeds-page.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DogApiService } from './services/dog-api.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,8 +36,9 @@ import { BreedsPageComponent } from './pages/breeds-page/breeds-page.component';
     MaterialModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
   ],
-  providers: [CookieService, FavoritesService],
+  providers: [CookieService, FavoritesService, DogApiService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

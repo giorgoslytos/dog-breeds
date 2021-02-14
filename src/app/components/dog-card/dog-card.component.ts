@@ -7,13 +7,10 @@ import {
   ViewChild,
   EventEmitter,
 } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { DogImage } from 'src/app/interfaces/DogImage.interface';
+import { Observable } from 'rxjs';
 import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
-import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { ContentState } from 'src/app/types/ContentState';
-import { CookieService } from 'ngx-cookie-service';
 import { FavoritesService } from 'src/app/services/favorites.service';
 
 @Component({

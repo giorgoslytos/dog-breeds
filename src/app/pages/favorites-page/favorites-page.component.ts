@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
 import { DogsAllInfo } from 'src/app/interfaces/DogsAllInfo.interface';
-import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
 import { FavoritesService } from 'src/app/services/favorites.service';
 
 @Component({
