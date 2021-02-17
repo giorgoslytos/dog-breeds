@@ -1,6 +1,6 @@
 export interface BreedList {
   message: {
-    breed: [subbreed?: string];
+    [breed: string]: string[];
   };
   status: string;
 }

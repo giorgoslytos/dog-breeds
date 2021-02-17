@@ -18,6 +18,7 @@ import { FavoritesService } from './services/favorites.service';
 import { BreedsPageComponent } from './pages/breeds-page/breeds-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DogApiService } from './services/dog-api.service';
+import { GetBreedNamePipe } from './pipes/get-breed-name.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +29,7 @@ import { DogApiService } from './services/dog-api.service';
     DogFromUrlComponent,
     SocialModalComponent,
     BreedsPageComponent,
+    GetBreedNamePipe,
   ],
   imports: [
     BrowserModule,
