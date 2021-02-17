@@ -19,6 +19,7 @@ import { BreedsPageComponent } from './pages/breeds-page/breeds-page.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DogApiService } from './services/dog-api.service';
 import { GetBreedNamePipe } from './pipes/get-breed-name.pipe';
+import { ModalComponent } from './components/modal/modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import { GetBreedNamePipe } from './pipes/get-breed-name.pipe';
     SocialModalComponent,
     BreedsPageComponent,
     GetBreedNamePipe,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,

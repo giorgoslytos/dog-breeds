@@ -11,7 +11,9 @@ export class GetBreedNamePipe implements PipeTransform {
     selectedBreeds?: string[]
   ): string {
     return selectedBreeds
-      .map((x) => (breedList.message[x].includes(subBreed) ? x : ''))
-      .reduce((acc, curr) => acc || curr);
+      ? selectedBreeds
+          .map((x) => (breedList.message[x].includes(subBreed) ? x : ''))
+          .reduce((acc, curr) => acc || curr, '')
+      : '';
   }
 }

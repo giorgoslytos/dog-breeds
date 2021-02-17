@@ -3,6 +3,7 @@
   fxLayout="row"
   fxLayoutAlign="space-between center"
   *ngIf="breedList && breedList?.message"
+  [style.margin]="'2rem'"
 >
   <mat-form-field appearance="fill">
     <mat-label>Breeds</mat-label>
@@ -27,7 +28,7 @@
     </mat-select>
   </mat-form-field>
   <!-- SUB BREEDS -->
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill" (click)="openModal()">
     <mat-label>Sub-Breeds</mat-label>
     <mat-select [formControl]="selectedSubBreeds" multiple>
       <mat-select-trigger>
@@ -40,12 +41,10 @@
           {{ selectedSubBreeds.value?.length === 2 ? "other" : "others" }})
         </span>
       </mat-select-trigger>
-      <mat-option *ngFor="let subBreed of subBreedListArr" [value]="subBreed"
-        >{{ subBreed }} -
-        {{
-          subBreed | getBreedName: breedList:selectedBreeds.value
-        }}</mat-option
-      >
+      <mat-option *ngFor="let subBreed of subBreedListArr" [value]="subBreed">
+        {{ subBreed | getBreedName: breedList:selectedBreeds.value }} -
+        {{ subBreed }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
