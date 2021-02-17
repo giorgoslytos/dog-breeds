@@ -33,7 +33,7 @@ export class DogCardComponent implements OnInit {
   favorited: boolean = false;
   cookiesArr: string[] = [];
   ContentState = ContentState;
-
+  xpandStatus = false;
   constructor(private favoritesService: FavoritesService) {}
   ngOnInit() {
     this.cookiesArr = this.favoritesService.cookiesArr;
@@ -44,6 +44,7 @@ export class DogCardComponent implements OnInit {
     console.log(changes);
     console.log('changes');
     this.favorited = false;
+    this.xpandStatus = false;
   }
   handleFavorite() {
     if (!this.favorited) {

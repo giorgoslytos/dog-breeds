@@ -41,7 +41,11 @@
 
   <mat-card-content>
     <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%">
-      <mat-expansion-panel hideToggle style="width: 100%">
+      <mat-expansion-panel
+        [(expanded)]="xpandStatus"
+        hideToggle
+        style="width: 100%"
+      >
         <mat-expansion-panel-header>
           <mat-icon color="accent">info</mat-icon>
           <mat-panel-title>info</mat-panel-title>
