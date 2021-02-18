@@ -1,50 +1,63 @@
-<div>breeds sub-breeds all random</div>
 <div
-  fxLayout="row"
-  fxLayoutAlign="space-between center"
+  fxLayout="column"
+  fxLayoutAlign="center end"
   *ngIf="breedList && breedList?.message"
   [style.margin]="'2rem'"
 >
-  <mat-form-field appearance="fill">
-    <mat-label>Breeds</mat-label>
-    <mat-select
-      [formControl]="selectedBreeds"
-      multiple
-      (openedChange)="populateSubBreeds()"
-    >
-      <mat-select-trigger>
-        {{ selectedBreeds.value ? selectedBreeds.value[0] : "" }}
-        <span
-          *ngIf="selectedBreeds.value?.length > 1"
-          class="example-additional-selection"
-        >
-          (+{{ selectedBreeds.value.length - 1 }}
-          {{ selectedBreeds.value?.length === 2 ? "other" : "others" }})
-        </span>
-      </mat-select-trigger>
-      <mat-option *ngFor="let breed of breedListArr" [value]="breed">{{
-        breed
-      }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <!-- SUB BREEDS -->
-  <mat-form-field appearance="fill" (click)="openModal()">
-    <mat-label>Sub-Breeds</mat-label>
-    <mat-select [formControl]="selectedSubBreeds" multiple>
-      <mat-select-trigger>
-        {{ selectedSubBreeds.value ? selectedSubBreeds.value[0] : "" }}
-        <span
-          *ngIf="selectedSubBreeds.value?.length > 1"
-          class="example-additional-selection"
-        >
-          (+{{ selectedSubBreeds.value.length - 1 }}
-          {{ selectedSubBreeds.value?.length === 2 ? "other" : "others" }})
-        </span>
-      </mat-select-trigger>
-      <mat-option *ngFor="let subBreed of subBreedListArr" [value]="subBreed">
-        {{ subBreed | getBreedName: breedList:selectedBreeds.value }} -
-        {{ subBreed }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div>
+    <mat-form-field [style.margin-left]="'2rem'">
+      <mat-label>Breeds</mat-label>
+      <mat-select
+        [formControl]="selectedBreeds"
+        multiple
+        (openedChange)="populateSubBreeds()"
+      >
+        <mat-select-trigger>
+          {{ selectedBreeds.value ? selectedBreeds.value[0] : "" }}
+          <span
+            *ngIf="selectedBreeds.value?.length > 1"
+            class="example-additional-selection"
+          >
+            (+{{ selectedBreeds.value.length - 1 }}
+            {{ selectedBreeds.value?.length === 2 ? "other" : "others" }})
+          </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let breed of breedListArr" [value]="breed">{{
+          breed
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- SUB BREEDS -->
+    <mat-form-field (click)="openModal()" [style.margin-left]="'2rem'">
+      <mat-label>Sub-Breeds</mat-label>
+      <mat-select [formControl]="selectedSubBreeds" multiple>
+        <mat-select-trigger>
+          {{ selectedSubBreeds.value ? selectedSubBreeds.value[0] : "" }}
+          <span
+            *ngIf="selectedSubBreeds.value?.length > 1"
+            class="example-additional-selection"
+          >
+            (+{{ selectedSubBreeds.value.length - 1 }}
+            {{ selectedSubBreeds.value?.length === 2 ? "other" : "others" }})
+          </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let subBreed of subBreedListArr" [value]="subBreed">
+          {{ subBreed | getBreedName: breedList:selectedBreeds.value }} -
+          {{ subBreed }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field [style.margin-left]="'2rem'">
+      <mat-label>Quantity</mat-label>
+      <mat-select>
+        <mat-option [value]="'one'"> One </mat-option>
+        <mat-option [value]="'all'"> All </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div [style.margin]="'1rem 0'">
+    <button mat-raised-button color="primary">get one</button>
+    <span [style.margin]="'1rem'">- or -</span>
+    <button mat-raised-button color="primary">get all!</button>
+  </div>
 </div>

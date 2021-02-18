@@ -41,8 +41,6 @@ export class DogCardComponent implements OnInit {
   }
 
   ngOnChanges(changes: DogImageState): void {
-    console.log(changes);
-    console.log('changes');
     this.favorited = false;
     this.xpandStatus = false;
   }
