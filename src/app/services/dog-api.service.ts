@@ -10,16 +10,41 @@ import { BreedList } from '../interfaces/BreedList.interface';
 })
 export class DogApiService {
   BASE_URL: string = 'https://dog.ceo/api/';
-  // BASE_URL: string = 'https://dog.ceo/api/breed/bullterrier/images/random';
   BASE_INFO_URL: string = 'https://api-dog-breeds.herokuapp.com/api/search?q=';
 
   constructor(private http: HttpClient) {}
 
   getRandomDog(): Observable<DogImage> {
     return this.http.get<DogImage>(`${this.BASE_URL}breeds/image/random`);
-    // return this.http.get<DogImage>(`${this.BASE_URL}`);
   }
 
+  getSpecificDog(breed: string): Observable<DogImage> {
+    return this.http.get<DogImage>(
+      `${this.BASE_URL}breed/${breed}/images/random`
+    );
+  }
+
+  getSpecificDogs(breed: string): Observable<DogImage> {
+    return this.http.get<DogImage>(`${this.BASE_URL}breed/${breed}/images`);
+  }
+
+  getSpecificSubBreedDog(
+    breed: string,
+    subbreed: string
+  ): Observable<DogImage> {
+    return this.http.get<DogImage>(
+      `${this.BASE_URL}breed/${breed}/${subbreed}/images/random`
+    );
+  }
+
+  getSpecificSubBreedDogs(
+    breed: string,
+    subbreed: string
+  ): Observable<DogImage> {
+    return this.http.get<DogImage>(
+      `${this.BASE_URL}breed/${breed}/${subbreed}/images`
+    );
+  }
   getDogInfo(breedName: string): Observable<DogInfo[]> {
     return this.http.get<DogInfo[]>(`${this.BASE_INFO_URL}${breedName}`);
   }

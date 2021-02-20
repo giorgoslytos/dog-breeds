@@ -49,15 +49,28 @@
     </mat-form-field>
     <mat-form-field [style.margin-left]="'2rem'">
       <mat-label>Quantity</mat-label>
-      <mat-select>
+      <!-- <mat-select [formControl]="quantity">
         <mat-option [value]="'one'"> One </mat-option>
         <mat-option [value]="'all'"> All </mat-option>
+      </mat-select> -->
+      <mat-select [(ngModel)]="selectedQuantity" name="selectedQuantity">
+        <mat-option
+          *ngFor="let selectQuantity of quantity"
+          [value]="selectQuantity"
+        >
+          {{ selectQuantity }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
   <div [style.margin]="'1rem 0'">
-    <button mat-raised-button color="primary">get one</button>
-    <span [style.margin]="'1rem'">- or -</span>
-    <button mat-raised-button color="primary">get all!</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="fetchDogs(selectedQuantity)"
+      [disabled]="selectedQuantity === 'none'"
+    >
+      get {{ selectedQuantity }}
+    </button>
   </div>
 </div>

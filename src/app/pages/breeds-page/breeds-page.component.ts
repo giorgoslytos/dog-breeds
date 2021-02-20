@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, NgModel } from '@angular/forms';
 import { BreedList } from 'src/app/interfaces/BreedList.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,8 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
 export class BreedsPageComponent implements OnInit {
   selectedBreeds = new FormControl();
   selectedSubBreeds = new FormControl();
+  selectedQuantity: string = 'none';
+  quantity = ['one', 'all'];
   breedList: BreedList | undefined;
   breedListArr: Array<string> = [];
   subBreedListArr: Array<string> = [];
@@ -27,8 +29,7 @@ export class BreedsPageComponent implements OnInit {
   }
 
   ngDoCheck(): void {
-    console.log(this.selectedBreeds.value);
-    console.log(this.breedList?.message);
+    console.log(this.selectedQuantity);
   }
 
   populateSubBreeds() {
@@ -52,7 +53,36 @@ export class BreedsPageComponent implements OnInit {
         },
       });
     }
-    console.log(this.subBreedListArr);
+  }
+
+  fetchDogs(quantity: string) {
+    !this.selectedSubBreeds.value?.length
+      ? quantity === 'one'
+        ? this.selectedBreeds.value.forEach((dog: string) =>
+            this.dogApiService
+              .getSpecificDog(dog)
+              .subscribe((x) => console.log(x))
+          )
+        : this.selectedBreeds.value.forEach((dog: string) =>
+            this.dogApiService
+              .getSpecificDogs(dog)
+              .subscribe((x) => console.log(x))
+          )
+      : quantity === 'one'
+      ? this.selectedBreeds.value.forEach((breed: string) =>
+          this.selectedSubBreeds.value.forEach((subbreed: string) =>
+            this.dogApiService
+              .getSpecificSubBreedDog(breed, subbreed)
+              .subscribe((x) => console.log(x))
+          )
+        )
+      : this.selectedBreeds.value.forEach((breed: string) =>
+          this.selectedSubBreeds.value.forEach((subbreed: string) =>
+            this.dogApiService
+              .getSpecificSubBreedDogs(breed, subbreed)
+              .subscribe((x) => console.log(x))
+          )
+        );
   }
 }
 
