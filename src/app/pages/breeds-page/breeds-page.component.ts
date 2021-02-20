@@ -4,6 +4,8 @@ import { BreedList } from 'src/app/interfaces/BreedList.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { Observable } from 'rxjs';
+import { DogImage } from 'src/app/interfaces/DogImage.interface';
 
 @Component({
   selector: 'app-breeds-page',
@@ -21,6 +23,7 @@ export class BreedsPageComponent implements OnInit {
   breedSubbreedMask:
     | Array<{ breed: string; subbreed: string }>
     | undefined = [];
+  dogsImgObs: Observable<DogImage>[] | undefined;
   constructor(private dogApiService: DogApiService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -68,58 +71,26 @@ export class BreedsPageComponent implements OnInit {
     const dogsByBreed: string[] = this.selectedBreeds.filter(
       (x) => !this.selectedSubBreeds.map((x) => x.breed).includes(x)
     );
-    // !this.selectedSubBreeds.length
-    //   ? quantity === 'one'
-    //     ? this.selectedBreeds.forEach((dog: string) =>
-    //         this.dogApiService
-    //           .getSpecificDog(dog)
-    //           .subscribe((x) => console.log(x))
-    //       )
-    //     : this.selectedBreeds.forEach((dog: string) =>
-    //         this.dogApiService
-    //           .getSpecificDogs(dog)
-    //           .subscribe((x) => console.log(x))
-    //       )
-    //   : quantity === 'one'
-    //   ? this.selectedBreeds.forEach((breed: string) =>
-    //       this.selectedSubBreeds.forEach((subbreed: string) =>
-    //         this.dogApiService
-    //           .getSpecificSubBreedDog(breed, subbreed)
-    //           .subscribe((x) => console.log(x))
-    //       )
-    //     )
-    //   : this.selectedBreeds.forEach((breed: string) =>
-    //       this.selectedSubBreeds.forEach((subbreed: string) =>
-    //         this.dogApiService
-    //           .getSpecificSubBreedDogs(breed, subbreed)
-    //           .subscribe((x) => console.log(x))
-    //       )
-    //     );
+    switch (quantity) {
+      case 'one':
+        this.dogsImgObs = [
+          ...dogsByBreed.map((dog: string) =>
+            this.dogApiService.getSpecificDog(dog)
+          ),
+          ...this.selectedSubBreeds.map((dog) =>
+            this.dogApiService.getSpecificSubBreedDog(dog.breed, dog.subbreed)
+          ),
+        ];
+        break;
+      default:
+        this.dogsImgObs = [
+          ...dogsByBreed.map((dog: string) =>
+            this.dogApiService.getSpecificDogs(dog)
+          ),
+          ...this.selectedSubBreeds.map((dog) =>
+            this.dogApiService.getSpecificSubBreedDogs(dog.breed, dog.subbreed)
+          ),
+        ];
+    }
   }
 }
-
-// {
-//   australian: ["shepherd"],
-//   buhund: ["norwegian"],
-//   bulldog:  ["boston", "english", "french"],
-//   bullterrier: ["staffordshire"],
-//   collie: ["border"],
-//   coonhound: [],
-//   corgi: ["cardigan"],
-//   deerhound: ["scottish"],
-//   dingo: [],
-//   elkhound: ["norwegian"],
-//   finnish: ["lapphund"],
-//   frise: ["bichon"],
-//   germanshepherd: [],
-//   greyhound: ["italian"],
-//   hound:  ["afghan", "basset", "blood", "english", "ibizan", "plott", "walker"],
-//   husky: [],
-//   keeshond: [],
-//   komondor: [],
-//   labrador: [],
-//   mastiff: ["bull", "english", "tibetan"],
-//   mexicanhairless: [],
-//   mountain: ["bernese", "swiss"],
-//   ovcharka: ["caucasian"],
-//   pembroke: []}
