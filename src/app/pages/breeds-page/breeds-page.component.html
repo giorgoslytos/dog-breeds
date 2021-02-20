@@ -73,8 +73,20 @@
       get {{ selectedQuantity }}
     </button>
   </div>
-  <p *ngIf="dogsImgObs?.length">We found {{ dogsImgObs?.length }} puppies</p>
-  <div *ngFor="let item of dogsImgObs">
-    {{ item | async | json }}
+  <div>
+    {{ allDogsListObj | json }}
+  </div>
+  <p *ngIf="allDogsListObj?.length">
+    We found {{ allDogsListObj?.length }} puppies
+  </p>
+  <div>
+    <p *ngFor="let dog of allDogsListObj">a1</p>
+    <div fxLayout="row wrap" fxLayoutAlign="space-around start">
+      <app-dog-card
+        *ngFor="let dog of allDogsListObj"
+        [dogImageState]="dog.dogImageState"
+        [dogInfoState]="dog.dogInfoState"
+      ></app-dog-card>
+    </div>
   </div>
 </div>

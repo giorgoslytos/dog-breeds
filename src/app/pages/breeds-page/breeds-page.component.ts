@@ -4,8 +4,13 @@ import { BreedList } from 'src/app/interfaces/BreedList.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { Observable } from 'rxjs';
+import { Observable, from, of, async } from 'rxjs';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
+import { ContentState } from 'src/app/types/ContentState';
+import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
+import { catchError, map, startWith } from 'rxjs/operators';
+import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
+import { DogsAllInfo } from 'src/app/interfaces/DogsAllInfo.interface';
 
 @Component({
   selector: 'app-breeds-page',
@@ -24,6 +29,9 @@ export class BreedsPageComponent implements OnInit {
     | Array<{ breed: string; subbreed: string }>
     | undefined = [];
   dogsImgObs: Observable<DogImage>[] | undefined;
+  allDogsListObj: DogsAllInfo[] | undefined;
+  dogsImgs: string[] = [];
+
   constructor(private dogApiService: DogApiService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -34,9 +42,7 @@ export class BreedsPageComponent implements OnInit {
     });
   }
 
-  ngDoCheck(): void {
-    console.log(this.selectedQuantity);
-  }
+  ngDoCheck(): void {}
 
   populateSubBreeds() {
     this.breedSubbreedMask = this.selectedBreeds
@@ -49,10 +55,11 @@ export class BreedsPageComponent implements OnInit {
       )
       .reduce((acc: any, curr: any) => acc.concat(curr), []);
 
-    // .reduce((acc: any, curr: any) => [...acc, ...curr], []);
-
     if (this.subBreedListArr === []) {
       this.dialog.open(ModalComponent);
+    }
+    if (this.breedSubbreedMask?.length === 0) {
+      this.selectedSubBreeds = [];
     }
     console.log(this.subBreedListArr);
   }
@@ -73,24 +80,72 @@ export class BreedsPageComponent implements OnInit {
     );
     switch (quantity) {
       case 'one':
-        this.dogsImgObs = [
-          ...dogsByBreed.map((dog: string) =>
-            this.dogApiService.getSpecificDog(dog)
-          ),
-          ...this.selectedSubBreeds.map((dog) =>
-            this.dogApiService.getSpecificSubBreedDog(dog.breed, dog.subbreed)
-          ),
-        ];
+        dogsByBreed.forEach((dog: string) =>
+          this.dogApiService
+            .getSpecificDog(dog)
+            .subscribe((dogImg) => this.dogsImgs.push(dogImg.message || ''))
+        );
+        this.selectedSubBreeds.forEach((dog) =>
+          this.dogApiService
+            .getSpecificSubBreedDog(dog.breed, dog.subbreed)
+            .subscribe((dogImg) => this.dogsImgs.push(dogImg.message || ''))
+        );
         break;
       default:
-        this.dogsImgObs = [
-          ...dogsByBreed.map((dog: string) =>
-            this.dogApiService.getSpecificDogs(dog)
-          ),
-          ...this.selectedSubBreeds.map((dog) =>
-            this.dogApiService.getSpecificSubBreedDogs(dog.breed, dog.subbreed)
-          ),
-        ];
+        dogsByBreed.forEach((dog: string) =>
+          this.dogApiService
+            .getSpecificDogs(dog)
+            .subscribe((dogImg) =>
+              dogImg.message?.map((x) => this.dogsImgs.push(x))
+            )
+        );
+        this.selectedSubBreeds.forEach((dog) =>
+          this.dogApiService
+            .getSpecificSubBreedDogs(dog.breed, dog.subbreed)
+            .subscribe((dogImg) =>
+              dogImg.message?.map((x) => this.dogsImgs.push(x))
+            )
+        );
     }
+    console.log(this.dogsImgs);
+    this.allDogsListObj = this.dogsImgs.map((dogLink: string) => {
+      const title: string = exportTitleFromURL(dogLink);
+      const dogImageState = from([
+        {
+          state: ContentState.LOADED,
+          item: { message: dogLink, status: 'success' },
+          title,
+        },
+      ]).pipe(
+        startWith({ state: ContentState.LOADING }),
+        catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+      );
+      const dogInfoState = this.dogApiService
+        .getDogInfo(title.split(' ')[0])
+        .pipe(
+          map((item: DogInfo[]) => ({
+            state: ContentState.LOADED,
+            item:
+              item.filter(
+                (dog) =>
+                  dog.breedName ===
+                  title.split(' ').reverse().join(' ').toLowerCase()
+              )[0] ||
+              item.filter(
+                (dog) => dog.breedName === title.split(' ')[0].toLowerCase()
+              )[0] ||
+              item.filter(
+                (dog) => dog.dogInfo.breedGroup !== 'mixed breed dogs'
+              )[0] ||
+              item[0],
+          })),
+          startWith({ state: ContentState.LOADING }),
+          catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+        );
+      return {
+        dogImageState,
+        dogInfoState,
+      };
+    });
   }
 }

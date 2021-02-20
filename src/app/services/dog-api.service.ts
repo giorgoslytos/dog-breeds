@@ -24,8 +24,12 @@ export class DogApiService {
     );
   }
 
-  getSpecificDogs(breed: string): Observable<DogImage> {
-    return this.http.get<DogImage>(`${this.BASE_URL}breed/${breed}/images`);
+  getSpecificDogs(
+    breed: string
+  ): Observable<{ message: string[]; status: string }> {
+    return this.http.get<{ message: string[]; status: string }>(
+      `${this.BASE_URL}breed/${breed}/images`
+    );
   }
 
   getSpecificSubBreedDog(
@@ -40,8 +44,8 @@ export class DogApiService {
   getSpecificSubBreedDogs(
     breed: string,
     subbreed: string
-  ): Observable<DogImage> {
-    return this.http.get<DogImage>(
+  ): Observable<{ message: string[]; status: string }> {
+    return this.http.get<{ message: string[]; status: string }>(
       `${this.BASE_URL}breed/${breed}/${subbreed}/images`
     );
   }
