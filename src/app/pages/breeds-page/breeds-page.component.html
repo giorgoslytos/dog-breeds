@@ -68,7 +68,10 @@
       mat-raised-button
       color="primary"
       (click)="fetchDogs(selectedQuantity)"
-      [disabled]="selectedQuantity === 'none'"
+      [disabled]="
+        selectedQuantity === 'none' ||
+        selectedBreeds.value === null || selectedBreeds.value?.length === 0
+      "
     >
       get {{ selectedQuantity }}
     </button>
