@@ -11,13 +11,16 @@ import { ModalComponent } from 'src/app/components/modal/modal.component';
   styleUrls: ['./breeds-page.component.scss'],
 })
 export class BreedsPageComponent implements OnInit {
-  selectedBreeds = new FormControl();
-  selectedSubBreeds = new FormControl();
+  selectedBreeds: string[] = [];
+  selectedSubBreeds: { breed: string; subbreed: string }[] = [];
   selectedQuantity: string = 'none';
   quantity = ['one', 'all'];
   breedList: BreedList | undefined;
   breedListArr: Array<string> = [];
   subBreedListArr: Array<string> = [];
+  breedSubbreedMask:
+    | Array<{ breed: string; subbreed: string }>
+    | undefined = [];
   constructor(private dogApiService: DogApiService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -33,11 +36,17 @@ export class BreedsPageComponent implements OnInit {
   }
 
   populateSubBreeds() {
-    this.subBreedListArr =
-      this.selectedBreeds.value &&
-      this.selectedBreeds.value
-        .map((x: string) => this.breedList?.message[x])
-        .reduce((acc: any, curr: any) => [...acc, ...curr], []);
+    this.breedSubbreedMask = this.selectedBreeds
+      // .map((x: string) => this.breedList?.message[x])
+      .map((x: string) =>
+        this.breedList?.message[x].map((y) => ({
+          breed: x,
+          subbreed: y,
+        }))
+      )
+      .reduce((acc: any, curr: any) => acc.concat(curr), []);
+
+    // .reduce((acc: any, curr: any) => [...acc, ...curr], []);
 
     if (this.subBreedListArr === []) {
       this.dialog.open(ModalComponent);
@@ -45,7 +54,7 @@ export class BreedsPageComponent implements OnInit {
     console.log(this.subBreedListArr);
   }
   openModal() {
-    if (!this.subBreedListArr || this.subBreedListArr.length === 0) {
+    if (!this.breedSubbreedMask || this.breedSubbreedMask.length === 0) {
       this.dialog.open(ModalComponent, {
         data: {
           title: 'Notification',
@@ -56,33 +65,36 @@ export class BreedsPageComponent implements OnInit {
   }
 
   fetchDogs(quantity: string) {
-    !this.selectedSubBreeds.value?.length
-      ? quantity === 'one'
-        ? this.selectedBreeds.value.forEach((dog: string) =>
-            this.dogApiService
-              .getSpecificDog(dog)
-              .subscribe((x) => console.log(x))
-          )
-        : this.selectedBreeds.value.forEach((dog: string) =>
-            this.dogApiService
-              .getSpecificDogs(dog)
-              .subscribe((x) => console.log(x))
-          )
-      : quantity === 'one'
-      ? this.selectedBreeds.value.forEach((breed: string) =>
-          this.selectedSubBreeds.value.forEach((subbreed: string) =>
-            this.dogApiService
-              .getSpecificSubBreedDog(breed, subbreed)
-              .subscribe((x) => console.log(x))
-          )
-        )
-      : this.selectedBreeds.value.forEach((breed: string) =>
-          this.selectedSubBreeds.value.forEach((subbreed: string) =>
-            this.dogApiService
-              .getSpecificSubBreedDogs(breed, subbreed)
-              .subscribe((x) => console.log(x))
-          )
-        );
+    const dogsByBreed: string[] = this.selectedBreeds.filter(
+      (x) => !this.selectedSubBreeds.map((x) => x.breed).includes(x)
+    );
+    // !this.selectedSubBreeds.length
+    //   ? quantity === 'one'
+    //     ? this.selectedBreeds.forEach((dog: string) =>
+    //         this.dogApiService
+    //           .getSpecificDog(dog)
+    //           .subscribe((x) => console.log(x))
+    //       )
+    //     : this.selectedBreeds.forEach((dog: string) =>
+    //         this.dogApiService
+    //           .getSpecificDogs(dog)
+    //           .subscribe((x) => console.log(x))
+    //       )
+    //   : quantity === 'one'
+    //   ? this.selectedBreeds.forEach((breed: string) =>
+    //       this.selectedSubBreeds.forEach((subbreed: string) =>
+    //         this.dogApiService
+    //           .getSpecificSubBreedDog(breed, subbreed)
+    //           .subscribe((x) => console.log(x))
+    //       )
+    //     )
+    //   : this.selectedBreeds.forEach((breed: string) =>
+    //       this.selectedSubBreeds.forEach((subbreed: string) =>
+    //         this.dogApiService
+    //           .getSpecificSubBreedDogs(breed, subbreed)
+    //           .subscribe((x) => console.log(x))
+    //       )
+    //     );
   }
 }
 

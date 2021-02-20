@@ -1,3 +1,4 @@
+{{ dogImageState | async | json }}
 <ng-container
   *ngIf="dogImageState | async as dogImage"
   [ngSwitch]="dogImage.state"
