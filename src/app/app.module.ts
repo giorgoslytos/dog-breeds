@@ -20,6 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DogApiService } from './services/dog-api.service';
 import { GetBreedNamePipe } from './pipes/get-breed-name.pipe';
 import { ModalComponent } from './components/modal/modal.component';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +43,7 @@ import { ModalComponent } from './components/modal/modal.component';
     FlexLayoutModule,
     ReactiveFormsModule,
     FormsModule,
+    LazyLoadImageModule,
   ],
   providers: [CookieService, FavoritesService, DogApiService],
   bootstrap: [AppComponent],
