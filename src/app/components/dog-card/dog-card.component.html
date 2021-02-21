@@ -1,9 +1,3 @@
-<div>
-  {{ dogImageState | async | json }}
-</div>
-<div>
-  {{ dogInfoState | async | json }}
-</div>
 <ng-container
   *ngIf="dogImageState | async as dogImage"
   [ngSwitch]="dogImage.state"

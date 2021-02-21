@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormControl, NgModel } from '@angular/forms';
 import { BreedList } from 'src/app/interfaces/BreedList.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { Observable, from, of, async } from 'rxjs';
+import { Observable, from, of, async, Subject, BehaviorSubject } from 'rxjs';
 import { DogImage } from 'src/app/interfaces/DogImage.interface';
 import { ContentState } from 'src/app/types/ContentState';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
-import { catchError, map, startWith } from 'rxjs/operators';
+import { catchError, map, reduce, startWith, switchMap } from 'rxjs/operators';
 import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
 import { DogsAllInfo } from 'src/app/interfaces/DogsAllInfo.interface';
 
@@ -28,9 +28,11 @@ export class BreedsPageComponent implements OnInit {
   breedSubbreedMask:
     | Array<{ breed: string; subbreed: string }>
     | undefined = [];
-  dogsImgObs: Observable<DogImage>[] | undefined;
-  allDogsListObj: DogsAllInfo[] | undefined;
+  dogsImgObs: any;
   dogsImgs: string[] = [];
+  allDogsListObj: DogsAllInfo[] | undefined;
+  dogsArrChange: EventEmitter<string[]> = new EventEmitter();
+  dogsImgsSubject = new BehaviorSubject<string[]>([]);
 
   constructor(private dogApiService: DogApiService, public dialog: MatDialog) {}
 
@@ -38,7 +40,9 @@ export class BreedsPageComponent implements OnInit {
     this.dogApiService.getBreedList().subscribe((x) => {
       this.breedList = x;
       this.breedListArr = Object.keys(x.message);
-      console.log(Object.keys(x.message));
+    });
+    this.dogsArrChange.subscribe((x: any) => {
+      this.createDogsArray(x);
     });
   }
 
@@ -46,7 +50,6 @@ export class BreedsPageComponent implements OnInit {
 
   populateSubBreeds() {
     this.breedSubbreedMask = this.selectedBreeds
-      // .map((x: string) => this.breedList?.message[x])
       .map((x: string) =>
         this.breedList?.message[x].map((y) => ({
           breed: x,
@@ -61,7 +64,6 @@ export class BreedsPageComponent implements OnInit {
     if (this.breedSubbreedMask?.length === 0) {
       this.selectedSubBreeds = [];
     }
-    console.log(this.subBreedListArr);
   }
   openModal() {
     if (!this.breedSubbreedMask || this.breedSubbreedMask.length === 0) {
@@ -75,40 +77,46 @@ export class BreedsPageComponent implements OnInit {
   }
 
   fetchDogs(quantity: string) {
+    this.dogsImgs = [];
     const dogsByBreed: string[] = this.selectedBreeds.filter(
       (x) => !this.selectedSubBreeds.map((x) => x.breed).includes(x)
     );
     switch (quantity) {
       case 'one':
         dogsByBreed.forEach((dog: string) =>
-          this.dogApiService
-            .getSpecificDog(dog)
-            .subscribe((dogImg) => this.dogsImgs.push(dogImg.message || ''))
+          this.dogApiService.getSpecificDog(dog).subscribe((dogImg) => {
+            this.dogsImgs.push(dogImg.message || '');
+            this.dogsArrChange.emit(this.dogsImgs);
+          })
         );
         this.selectedSubBreeds.forEach((dog) =>
           this.dogApiService
             .getSpecificSubBreedDog(dog.breed, dog.subbreed)
-            .subscribe((dogImg) => this.dogsImgs.push(dogImg.message || ''))
+            .subscribe((dogImg) => {
+              this.dogsImgs.push(dogImg.message || '');
+              this.dogsArrChange.emit(this.dogsImgs);
+            })
         );
         break;
       default:
         dogsByBreed.forEach((dog: string) =>
-          this.dogApiService
-            .getSpecificDogs(dog)
-            .subscribe((dogImg) =>
-              dogImg.message?.map((x) => this.dogsImgs.push(x))
-            )
+          this.dogApiService.getSpecificDogs(dog).subscribe((dogImg) => {
+            dogImg.message?.map((x) => this.dogsImgs.push(x));
+            this.dogsArrChange.emit(this.dogsImgs);
+          })
         );
         this.selectedSubBreeds.forEach((dog) =>
           this.dogApiService
             .getSpecificSubBreedDogs(dog.breed, dog.subbreed)
-            .subscribe((dogImg) =>
-              dogImg.message?.map((x) => this.dogsImgs.push(x))
-            )
+            .subscribe((dogImg) => {
+              dogImg.message?.map((x) => this.dogsImgs.push(x));
+              this.dogsArrChange.emit(this.dogsImgs);
+            })
         );
     }
-    console.log(this.dogsImgs);
-    this.allDogsListObj = this.dogsImgs.map((dogLink: string) => {
+  }
+  createDogsArray(arr: string[]) {
+    this.dogsImgObs = arr.map((dogLink: string) => {
       const title: string = exportTitleFromURL(dogLink);
       const dogImageState = from([
         {
