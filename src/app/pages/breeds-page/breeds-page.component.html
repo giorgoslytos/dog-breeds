@@ -59,31 +59,30 @@
       </mat-select>
     </mat-form-field>
   </div>
-    <div [style.margin]="'1rem 0'" fxLayout="column" fxLayoutAlign="center end">
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="fetchDogs(selectedQuantity)"
-        [disabled]="
-          selectedQuantity === 'none' ||
-          selectedBreeds === null ||
-          selectedBreeds.length === 0
-        "
-      >
-        get {{ selectedQuantity }}
-      </button>
-      <p *ngIf="dogsImgObs?.length" [style.margin-top]="'2rem'">
-        We found {{ dogsImgObs?.length }} puppies
-      </p>
-    </div>
+  <div [style.margin]="'1rem 0'" fxLayout="column" fxLayoutAlign="center end">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="fetchDogs(selectedQuantity)"
+      [disabled]="
+        selectedQuantity === 'none' ||
+        selectedBreeds === null ||
+        selectedBreeds.length === 0
+      "
+    >
+      get {{ selectedQuantity }}
+    </button>
+    <p *ngIf="dogsImgObs?.length" [style.margin-top]="'2rem'">
+      We found {{ dogsImgObs?.length }} puppies
+    </p>
   </div>
-  <div>
-    <div fxLayout="row wrap" fxLayoutAlign="space-around start">
-      <app-dog-card
-        *ngFor="let dog of dogsImgObs"
-        [dogImageState]="dog.dogImageState"
-        [dogInfoState]="dog.dogInfoState"
-      ></app-dog-card>
-    </div>
+</div>
+<div>
+  <div fxLayout="row wrap" fxLayoutAlign="space-around start">
+    <app-dog-card
+      *ngFor="let dog of dogsImgObs"
+      [dogImageState]="dog.dogImageState"
+      [dogInfoState]="dog.dogInfoState"
+    ></app-dog-card>
   </div>
 </div>
