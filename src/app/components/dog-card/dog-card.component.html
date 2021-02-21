@@ -33,9 +33,11 @@
       <img
         mat-card-image
         #imageURLEl
-        src="{{ dogImage.item?.message }}"
+        [defaultImage]="'assets/images/dog-loading.jpg'"
+        [lazyLoad]="dogImage.item?.message || ''"
         alt="Image of {{ dogImage.title }}"
       />
+      <!-- src="{{ dogImage.item?.message }}" -->
 
       <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%">
