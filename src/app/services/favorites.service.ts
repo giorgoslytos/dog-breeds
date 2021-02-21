@@ -22,7 +22,6 @@ export class FavoritesService {
   ) {}
 
   initializeDogsAllArr() {
-    console.log('initialize');
     if (this.cookiesArr.length === 0) {
       this.fetchFavoritesCookieArr();
     }
