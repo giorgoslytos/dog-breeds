@@ -25,6 +25,8 @@ export class DogCardComponent implements OnInit {
   dogInfoState: Observable<DogInfoState> | undefined;
   @Input()
   favoritesMode: boolean = false;
+  @Input()
+  breedsPageMode: boolean = false;
   @ViewChild('imageURLEl', { static: false })
   imageURLEl!: ElementRef;
   @Output()

@@ -15,7 +15,7 @@
           <button
             mat-icon-button
             color="primary"
-            *ngIf="!favoritesMode"
+            *ngIf="!favoritesMode && !breedsPageMode"
             (click)="getAnotherDog.emit()"
           >
             <mat-icon>cached</mat-icon>
@@ -37,8 +37,6 @@
         [lazyLoad]="dogImage.item?.message || ''"
         alt="Image of {{ dogImage.title }}"
       />
-      <!-- src="{{ dogImage.item?.message }}" -->
-
       <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="space-between" style="width: 100%">
           <mat-expansion-panel
