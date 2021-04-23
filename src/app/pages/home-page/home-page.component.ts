@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
 import { ContentState } from 'src/app/types/ContentState';
-import { DogImage } from 'src/app/interfaces/DogImage.interface';
-import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
+import { DogCeoImage } from 'src/app/interfaces/DogCeoImage.interface';
+import { ApiDogBreedsInfo } from 'src/app/interfaces/ApiDogBreedsInfo.interface';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
-import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
-import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
+import { ApiDogBreedsInfoState } from 'src/app/interfaces/ApiDogBreedsInfoState.interface';
+import { DogCeoImageState } from 'src/app/interfaces/DogCeoImageState.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
 
 @Component({
@@ -18,10 +18,10 @@ export class HomePageComponent implements OnInit {
   randomImage: string = '';
   title: string = '';
   favorited: boolean = false;
-  dogInfo: DogInfo | undefined;
+  dogInfo: ApiDogBreedsInfo | undefined;
   dogInfoError: string = '';
-  dogImageState: Observable<DogImageState> | undefined;
-  dogInfoState: Observable<DogInfoState> | undefined;
+  dogImageState: Observable<DogCeoImageState> | undefined;
+  dogInfoState: Observable<ApiDogBreedsInfoState> | undefined;
 
   private readonly onDestroy = new Subject<void>();
 
@@ -34,11 +34,11 @@ export class HomePageComponent implements OnInit {
   getDogFromApi() {
     this.dogImageState = this.apiService.getRandomDog().pipe(
       map(
-        (dogImage: DogImage) => (
+        (dogImage: DogCeoImage) => (
           (this.dogInfoState = this.apiService
             .getDogInfo(exportTitleFromURL(dogImage.message).split(' ')[0])
             .pipe(
-              map((dogInfo: DogInfo[]) => ({
+              map((dogInfo: ApiDogBreedsInfo[]) => ({
                 state: ContentState.LOADED,
                 item:
                   dogInfo.filter(

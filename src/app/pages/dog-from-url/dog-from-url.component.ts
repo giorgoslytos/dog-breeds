@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { from, Observable, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
-import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
-import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
-import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
+import { DogCeoImageState } from 'src/app/interfaces/DogCeoImageState.interface';
+import { ApiDogBreedsInfo } from 'src/app/interfaces/ApiDogBreedsInfo.interface';
+import { ApiDogBreedsInfoState } from 'src/app/interfaces/ApiDogBreedsInfoState.interface';
 import { DogApiService } from 'src/app/services/dog-api.service';
 import { ContentState } from 'src/app/types/ContentState';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
@@ -24,8 +24,8 @@ export class DogFromUrlComponent implements OnInit {
   ContentState = ContentState;
   // private mockData: string =
   //   'https://images.dog.ceo/breeds/poodle-miniature/n02113712_9573.jpg';
-  dogInfoState: Observable<DogInfoState> | undefined;
-  dogImageState: Observable<DogImageState> | undefined;
+  dogInfoState: Observable<ApiDogBreedsInfoState> | undefined;
+  dogImageState: Observable<DogCeoImageState> | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,7 +48,7 @@ export class DogFromUrlComponent implements OnInit {
       catchError((e) => of({ state: ContentState.ERR, error: e.message }))
     );
     this.dogInfoState = this.apiService.getDogInfo(title).pipe(
-      map((item: DogInfo[]) => ({
+      map((item: ApiDogBreedsInfo[]) => ({
         state: ContentState.LOADED,
         item:
           item.filter((dog) => dog.breedName === title.toLowerCase())[0] ||

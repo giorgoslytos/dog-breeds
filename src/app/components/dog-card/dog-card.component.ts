@@ -8,8 +8,8 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DogImageState } from 'src/app/interfaces/DogImageState.interface';
-import { DogInfoState } from 'src/app/interfaces/DogInfoState.interface';
+import { DogCeoImageState } from 'src/app/interfaces/DogCeoImageState.interface';
+import { ApiDogBreedsInfoState } from 'src/app/interfaces/ApiDogBreedsInfoState.interface';
 import { ContentState } from 'src/app/types/ContentState';
 import { FavoritesService } from 'src/app/services/favorites.service';
 
@@ -20,9 +20,9 @@ import { FavoritesService } from 'src/app/services/favorites.service';
 })
 export class DogCardComponent implements OnInit {
   @Input()
-  dogImageState: Observable<DogImageState> | undefined;
+  dogImageState: Observable<DogCeoImageState> | undefined;
   @Input()
-  dogInfoState: Observable<DogInfoState> | undefined;
+  dogInfoState: Observable<ApiDogBreedsInfoState> | undefined;
   @Input()
   favoritesMode: boolean = false;
   @Input()
@@ -42,7 +42,7 @@ export class DogCardComponent implements OnInit {
     this.favorited = this.favoritesMode;
   }
 
-  ngOnChanges(changes: DogImageState): void {
+  ngOnChanges(changes: DogCeoImageState): void {
     this.favorited = false;
     this.xpandStatus = false;
   }

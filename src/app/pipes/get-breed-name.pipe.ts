@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { BreedList } from '../interfaces/BreedList.interface';
+import { DogCeoBreedsListObj } from '../interfaces/DogCeoBreedsListObj';
 
 @Pipe({
   name: 'getBreedName',
@@ -7,7 +7,7 @@ import { BreedList } from '../interfaces/BreedList.interface';
 export class GetBreedNamePipe implements PipeTransform {
   transform(
     subBreed: string,
-    breedList: BreedList,
+    breedList: DogCeoBreedsListObj,
     selectedBreeds?: string[]
   ): string {
     return selectedBreeds

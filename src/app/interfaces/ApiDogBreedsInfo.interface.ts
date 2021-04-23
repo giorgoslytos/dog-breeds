@@ -1,4 +1,7 @@
-export interface DogInfo {
+/**
+ * api-dog-breeds
+ */
+export interface ApiDogBreedsInfo {
   message: any;
   breedName: string;
   image: string;

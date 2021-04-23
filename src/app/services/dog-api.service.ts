@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { DogImage } from '../interfaces/DogImage.interface';
-import { DogInfo } from '../interfaces/DogInfo.interface';
+import { DogCeoImage } from '../interfaces/DogCeoImage.interface';
+import { ApiDogBreedsInfo } from '../interfaces/ApiDogBreedsInfo.interface';
 import { Observable } from 'rxjs';
-import { BreedList } from '../interfaces/BreedList.interface';
+import { DogCeoBreedsListObj } from '../interfaces/DogCeoBreedsListObj';
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +14,12 @@ export class DogApiService {
 
   constructor(private http: HttpClient) {}
 
-  getRandomDog(): Observable<DogImage> {
-    return this.http.get<DogImage>(`${this.BASE_URL}breeds/image/random`);
+  getRandomDog(): Observable<DogCeoImage> {
+    return this.http.get<DogCeoImage>(`${this.BASE_URL}breeds/image/random`);
   }
 
-  getSpecificDog(breed: string): Observable<DogImage> {
-    return this.http.get<DogImage>(
+  getSpecificDog(breed: string): Observable<DogCeoImage> {
+    return this.http.get<DogCeoImage>(
       `${this.BASE_URL}breed/${breed}/images/random`
     );
   }
@@ -35,8 +35,8 @@ export class DogApiService {
   getSpecificSubBreedDog(
     breed: string,
     subbreed: string
-  ): Observable<DogImage> {
-    return this.http.get<DogImage>(
+  ): Observable<DogCeoImage> {
+    return this.http.get<DogCeoImage>(
       `${this.BASE_URL}breed/${breed}/${subbreed}/images/random`
     );
   }
@@ -49,11 +49,15 @@ export class DogApiService {
       `${this.BASE_URL}breed/${breed}/${subbreed}/images`
     );
   }
-  getDogInfo(breedName: string): Observable<DogInfo[]> {
-    return this.http.get<DogInfo[]>(`${this.BASE_INFO_URL}${breedName}`);
+  getDogInfo(breedName: string): Observable<ApiDogBreedsInfo[]> {
+    return this.http.get<ApiDogBreedsInfo[]>(
+      `${this.BASE_INFO_URL}${breedName}`
+    );
   }
 
-  getBreedList(): Observable<BreedList> {
-    return this.http.get<BreedList>(`${this.BASE_URL}breeds/list/all`);
+  getBreedList(): Observable<DogCeoBreedsListObj> {
+    return this.http.get<DogCeoBreedsListObj>(
+      `${this.BASE_URL}breeds/list/all`
+    );
   }
 }

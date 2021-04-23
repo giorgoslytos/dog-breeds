@@ -2,8 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { from, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
-import { DogInfo } from '../interfaces/DogInfo.interface';
-import { DogsAllInfo } from '../interfaces/DogsAllInfo.interface';
+import { ApiDogBreedsInfo } from '../interfaces/ApiDogBreedsInfo.interface';
+import { CombinedDogInfoState } from '../interfaces/CombinedDogInfoState.interface';
 import { ContentState } from '../types/ContentState';
 import { exportTitleFromURL } from '../utils/exportTitleFromURL';
 import { DogApiService } from './dog-api.service';
@@ -12,9 +12,9 @@ import { DogApiService } from './dog-api.service';
   providedIn: 'root',
 })
 export class FavoritesService {
-  dogsAllArrChange: EventEmitter<DogsAllInfo[]> = new EventEmitter();
+  dogsAllArrChange: EventEmitter<CombinedDogInfoState[]> = new EventEmitter();
   public cookiesArr: Array<string> = [];
-  dogsAllArr: DogsAllInfo[] | undefined;
+  dogsAllArr: CombinedDogInfoState[] | undefined;
 
   constructor(
     private cookie: CookieService,
@@ -38,7 +38,7 @@ export class FavoritesService {
         catchError((e) => of({ state: ContentState.ERR, error: e.message }))
       );
       const dogInfoState = this.apiService.getDogInfo(title.split(' ')[0]).pipe(
-        map((item: DogInfo[]) => ({
+        map((item: ApiDogBreedsInfo[]) => ({
           state: ContentState.LOADED,
           item:
             item.filter(

@@ -1,9 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface DialogData {
   title: string;
@@ -15,6 +11,9 @@ export interface DialogData {
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.scss'],
 })
+/**
+ * ng material modal
+ */
 export class ModalComponent {
   constructor(
     public dialogRef: MatDialogRef<ModalComponent>,

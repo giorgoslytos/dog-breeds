@@ -1,16 +1,14 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormControl, NgModel } from '@angular/forms';
-import { BreedList } from 'src/app/interfaces/BreedList.interface';
+import { DogCeoBreedsListObj } from 'src/app/interfaces/DogCeoBreedsListObj';
 import { DogApiService } from 'src/app/services/dog-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { Observable, from, of, async, Subject, BehaviorSubject } from 'rxjs';
-import { DogImage } from 'src/app/interfaces/DogImage.interface';
+import { from, of, BehaviorSubject } from 'rxjs';
 import { ContentState } from 'src/app/types/ContentState';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
-import { catchError, map, reduce, startWith, switchMap } from 'rxjs/operators';
-import { DogInfo } from 'src/app/interfaces/DogInfo.interface';
-import { DogsAllInfo } from 'src/app/interfaces/DogsAllInfo.interface';
+import { catchError, map, startWith } from 'rxjs/operators';
+import { ApiDogBreedsInfo } from 'src/app/interfaces/ApiDogBreedsInfo.interface';
+import { CombinedDogInfoState } from 'src/app/interfaces/CombinedDogInfoState.interface';
 
 @Component({
   selector: 'app-breeds-page',
@@ -22,7 +20,7 @@ export class BreedsPageComponent implements OnInit {
   selectedSubBreeds: { breed: string; subbreed: string }[] = [];
   selectedQuantity: string = 'none';
   quantity = ['one', 'all'];
-  breedList: BreedList | undefined;
+  breedList: DogCeoBreedsListObj | undefined;
   breedListArr: Array<string> = [];
   subBreedListArr: Array<string> = [];
   breedSubbreedMask:
@@ -30,7 +28,7 @@ export class BreedsPageComponent implements OnInit {
     | undefined = [];
   dogsImgObs: any;
   dogsImgs: string[] = [];
-  allDogsListObj: DogsAllInfo[] | undefined;
+  allDogsListObj: CombinedDogInfoState[] | undefined;
   dogsArrChange: EventEmitter<string[]> = new EventEmitter();
   dogsImgsSubject = new BehaviorSubject<string[]>([]);
 
@@ -131,7 +129,7 @@ export class BreedsPageComponent implements OnInit {
       const dogInfoState = this.dogApiService
         .getDogInfo(title.split(' ')[0])
         .pipe(
-          map((item: DogInfo[]) => ({
+          map((item: ApiDogBreedsInfo[]) => ({
             state: ContentState.LOADED,
             item:
               item.filter(
