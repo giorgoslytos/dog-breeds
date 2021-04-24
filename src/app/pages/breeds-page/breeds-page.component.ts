@@ -3,12 +3,11 @@ import { DogCeoBreedsListObj } from 'src/app/interfaces/DogCeoBreedsListObj';
 import { DogApiService } from 'src/app/services/dog-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
-import { from, of, BehaviorSubject } from 'rxjs';
+import { from, of, Observable } from 'rxjs';
 import { ContentState } from 'src/app/types/ContentState';
 import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
 import { catchError, map, startWith } from 'rxjs/operators';
 import { ApiDogBreedsInfo } from 'src/app/interfaces/ApiDogBreedsInfo.interface';
-import { CombinedDogInfoState } from 'src/app/interfaces/CombinedDogInfoState.interface';
 
 @Component({
   selector: 'app-breeds-page',
@@ -16,21 +15,32 @@ import { CombinedDogInfoState } from 'src/app/interfaces/CombinedDogInfoState.in
   styleUrls: ['./breeds-page.component.scss'],
 })
 export class BreedsPageComponent implements OnInit {
-  selectedBreeds: string[] = [];
-  selectedSubBreeds: { breed: string; subbreed: string }[] = [];
-  selectedQuantity: string = 'none';
-  quantity = ['one', 'all'];
-  breedList: DogCeoBreedsListObj | undefined;
-  breedListArr: Array<string> = [];
-  subBreedListArr: Array<string> = [];
-  breedSubbreedMask:
+  public selectedBreeds: string[] = [];
+  public selectedSubBreeds: { breed: string; subbreed: string }[] = [];
+  public selectedQuantity: string = 'none';
+  public quantity = ['one', 'all'];
+  public breedList: DogCeoBreedsListObj | undefined;
+  public breedListArr: Array<string> = [];
+  public breedSubbreedMask:
     | Array<{ breed: string; subbreed: string }>
     | undefined = [];
-  dogsImgObs: any;
-  dogsImgs: string[] = [];
-  allDogsListObj: CombinedDogInfoState[] | undefined;
-  dogsArrChange: EventEmitter<string[]> = new EventEmitter();
-  dogsImgsSubject = new BehaviorSubject<string[]>([]);
+
+  private subBreedListArr: Array<string> = [];
+  public dogsImgObs: {
+    dogImageState$: Observable<{
+      state: ContentState;
+      item?: { message: string; status: string };
+      title?: string;
+      error?: string;
+    }>;
+    dogInfoState$: Observable<{
+      state: ContentState;
+      item?: ApiDogBreedsInfo;
+      error?: any;
+    }>;
+  }[] = [];
+  private dogsImgs: string[] = [];
+  private dogsArrChange: EventEmitter<string[]> = new EventEmitter();
 
   constructor(private dogApiService: DogApiService, public dialog: MatDialog) {}
 
@@ -116,7 +126,7 @@ export class BreedsPageComponent implements OnInit {
   createDogsArray(arr: string[]) {
     this.dogsImgObs = arr.map((dogLink: string) => {
       const title: string = exportTitleFromURL(dogLink);
-      const dogImageState = from([
+      const dogImageState$ = from([
         {
           state: ContentState.LOADED,
           item: { message: dogLink, status: 'success' },
@@ -126,7 +136,7 @@ export class BreedsPageComponent implements OnInit {
         startWith({ state: ContentState.LOADING }),
         catchError((e) => of({ state: ContentState.ERR, error: e.message }))
       );
-      const dogInfoState = this.dogApiService
+      const dogInfoState$ = this.dogApiService
         .getDogInfo(title.split(' ')[0])
         .pipe(
           map((item: ApiDogBreedsInfo[]) => ({
@@ -149,8 +159,8 @@ export class BreedsPageComponent implements OnInit {
           catchError((e) => of({ state: ContentState.ERR, error: e.message }))
         );
       return {
-        dogImageState,
-        dogInfoState,
+        dogImageState$,
+        dogInfoState$,
       };
     });
   }

@@ -20,23 +20,25 @@ import { FavoritesService } from 'src/app/services/favorites.service';
 })
 export class DogCardComponent implements OnInit {
   @Input()
-  dogImageState: Observable<DogCeoImageState> | undefined;
+  public dogImageState$: Observable<DogCeoImageState> | undefined;
   @Input()
-  dogInfoState: Observable<ApiDogBreedsInfoState> | undefined;
+  public dogInfoState$: Observable<ApiDogBreedsInfoState> | undefined;
   @Input()
-  favoritesMode: boolean = false;
+  public favoritesMode: boolean = false;
   @Input()
-  breedsPageMode: boolean = false;
+  public breedsPageMode: boolean = false;
   @ViewChild('imageURLEl', { static: false })
-  imageURLEl!: ElementRef;
+  private imageURLEl!: ElementRef;
   @Output()
-  getAnotherDog: EventEmitter<string> = new EventEmitter<string>();
+  public getAnotherDog: EventEmitter<string> = new EventEmitter<string>();
 
-  favorited: boolean = false;
-  cookiesArr: string[] = [];
-  ContentState = ContentState;
-  xpandStatus = false;
+  public favorited: boolean = false;
+  public cookiesArr: string[] = [];
+  public ContentState = ContentState;
+  public xpandStatus = false;
+
   constructor(private favoritesService: FavoritesService) {}
+
   ngOnInit() {
     this.cookiesArr = this.favoritesService.cookiesArr;
     this.favorited = this.favoritesMode;

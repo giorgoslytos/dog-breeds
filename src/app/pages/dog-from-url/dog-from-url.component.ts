@@ -16,16 +16,14 @@ import { exportTitleFromURL } from 'src/app/utils/exportTitleFromURL';
   styleUrls: ['./dog-from-url.component.scss'],
 })
 export class DogFromUrlComponent implements OnInit {
-  dogLink: string | undefined;
-  cookiesArr: string[] = [];
-  favorited: boolean = false;
-  title: string | undefined;
+  private dogLink: string | undefined;
+  private cookiesArr: string[] = [];
+  private favorited: boolean = false;
 
-  ContentState = ContentState;
   // private mockData: string =
   //   'https://images.dog.ceo/breeds/poodle-miniature/n02113712_9573.jpg';
-  dogInfoState: Observable<ApiDogBreedsInfoState> | undefined;
-  dogImageState: Observable<DogCeoImageState> | undefined;
+  public dogInfoState$: Observable<ApiDogBreedsInfoState> | undefined;
+  public dogImageState$: Observable<DogCeoImageState> | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,7 +35,7 @@ export class DogFromUrlComponent implements OnInit {
 
   ngOnInit(): void {
     const title: string = exportTitleFromURL(this.dogLink).split(' ')[0];
-    this.dogImageState = from([
+    this.dogImageState$ = from([
       {
         state: ContentState.LOADED,
         item: { message: this.dogLink, status: 'success' },
@@ -47,7 +45,7 @@ export class DogFromUrlComponent implements OnInit {
       startWith({ state: ContentState.LOADING }),
       catchError((e) => of({ state: ContentState.ERR, error: e.message }))
     );
-    this.dogInfoState = this.apiService.getDogInfo(title).pipe(
+    this.dogInfoState$ = this.apiService.getDogInfo(title).pipe(
       map((item: ApiDogBreedsInfo[]) => ({
         state: ContentState.LOADED,
         item:

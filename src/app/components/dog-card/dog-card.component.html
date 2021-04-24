@@ -1,5 +1,5 @@
 <ng-container
-  *ngIf="dogImageState | async as dogImage"
+  *ngIf="dogImageState$ | async as dogImage"
   [ngSwitch]="dogImage.state"
 >
   <ng-container *ngSwitchCase="ContentState.LOADING">
@@ -53,7 +53,7 @@
             </mat-expansion-panel-header>
             <!-- DOG INFO -->
             <ng-container
-              *ngIf="dogInfoState | async as dogInfo"
+              *ngIf="dogInfoState$ | async as dogInfo"
               [ngSwitch]="dogInfo.state"
             >
               <ng-container *ngSwitchCase="ContentState.LOADED">

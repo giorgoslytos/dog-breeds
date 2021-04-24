@@ -81,8 +81,8 @@
   <div fxLayout="row wrap" fxLayoutAlign="space-around start">
     <app-dog-card
       *ngFor="let dog of dogsImgObs"
-      [dogImageState]="dog.dogImageState"
-      [dogInfoState]="dog.dogInfoState"
+      [dogImageState$]="dog.dogImageState$"
+      [dogInfoState$]="dog.dogInfoState$"
       [breedsPageMode]="true"
     ></app-dog-card>
   </div>

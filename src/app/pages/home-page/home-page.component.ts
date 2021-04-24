@@ -15,15 +15,8 @@ import { DogApiService } from 'src/app/services/dog-api.service';
   styleUrls: ['./home-page.component.scss'],
 })
 export class HomePageComponent implements OnInit {
-  randomImage: string = '';
-  title: string = '';
-  favorited: boolean = false;
-  dogInfo: ApiDogBreedsInfo | undefined;
-  dogInfoError: string = '';
-  dogImageState: Observable<DogCeoImageState> | undefined;
-  dogInfoState: Observable<ApiDogBreedsInfoState> | undefined;
-
-  private readonly onDestroy = new Subject<void>();
+  public dogImageState$: Observable<DogCeoImageState> | undefined;
+  public dogInfoState$: Observable<ApiDogBreedsInfoState> | undefined;
 
   constructor(private apiService: DogApiService) {}
 
@@ -32,10 +25,10 @@ export class HomePageComponent implements OnInit {
   }
 
   getDogFromApi() {
-    this.dogImageState = this.apiService.getRandomDog().pipe(
+    this.dogImageState$ = this.apiService.getRandomDog().pipe(
       map(
         (dogImage: DogCeoImage) => (
-          (this.dogInfoState = this.apiService
+          (this.dogInfoState$ = this.apiService
             .getDogInfo(exportTitleFromURL(dogImage.message).split(' ')[0])
             .pipe(
               map((dogInfo: ApiDogBreedsInfo[]) => ({

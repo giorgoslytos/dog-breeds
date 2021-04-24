@@ -3,7 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { from, of } from 'rxjs';
 import { catchError, map, startWith } from 'rxjs/operators';
 import { ApiDogBreedsInfo } from '../interfaces/ApiDogBreedsInfo.interface';
-import { CombinedDogInfoState } from '../interfaces/CombinedDogInfoState.interface';
+import { CombinedDogInfoState$ } from '../interfaces/CombinedDogInfoState.interface';
 import { ContentState } from '../types/ContentState';
 import { exportTitleFromURL } from '../utils/exportTitleFromURL';
 import { DogApiService } from './dog-api.service';
@@ -12,9 +12,9 @@ import { DogApiService } from './dog-api.service';
   providedIn: 'root',
 })
 export class FavoritesService {
-  dogsAllArrChange: EventEmitter<CombinedDogInfoState[]> = new EventEmitter();
+  dogsAllArrChange: EventEmitter<CombinedDogInfoState$[]> = new EventEmitter();
   public cookiesArr: Array<string> = [];
-  dogsAllArr: CombinedDogInfoState[] | undefined;
+  dogsAllArr: CombinedDogInfoState$[] | undefined;
 
   constructor(
     private cookie: CookieService,
@@ -27,7 +27,7 @@ export class FavoritesService {
     }
     this.dogsAllArr = this.cookiesArr.map((dogLink: string) => {
       const title: string = exportTitleFromURL(dogLink);
-      const dogImageState = from([
+      const dogImageState$ = from([
         {
           state: ContentState.LOADED,
           item: { message: dogLink, status: 'success' },
@@ -37,29 +37,31 @@ export class FavoritesService {
         startWith({ state: ContentState.LOADING }),
         catchError((e) => of({ state: ContentState.ERR, error: e.message }))
       );
-      const dogInfoState = this.apiService.getDogInfo(title.split(' ')[0]).pipe(
-        map((item: ApiDogBreedsInfo[]) => ({
-          state: ContentState.LOADED,
-          item:
-            item.filter(
-              (dog) =>
-                dog.breedName ===
-                title.split(' ').reverse().join(' ').toLowerCase()
-            )[0] ||
-            item.filter(
-              (dog) => dog.breedName === title.split(' ')[0].toLowerCase()
-            )[0] ||
-            item.filter(
-              (dog) => dog.dogInfo.breedGroup !== 'mixed breed dogs'
-            )[0] ||
-            item[0],
-        })),
-        startWith({ state: ContentState.LOADING }),
-        catchError((e) => of({ state: ContentState.ERR, error: e.message }))
-      );
+      const dogInfoState$ = this.apiService
+        .getDogInfo(title.split(' ')[0])
+        .pipe(
+          map((item: ApiDogBreedsInfo[]) => ({
+            state: ContentState.LOADED,
+            item:
+              item.filter(
+                (dog) =>
+                  dog.breedName ===
+                  title.split(' ').reverse().join(' ').toLowerCase()
+              )[0] ||
+              item.filter(
+                (dog) => dog.breedName === title.split(' ')[0].toLowerCase()
+              )[0] ||
+              item.filter(
+                (dog) => dog.dogInfo.breedGroup !== 'mixed breed dogs'
+              )[0] ||
+              item[0],
+          })),
+          startWith({ state: ContentState.LOADING }),
+          catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+        );
       return {
-        dogImageState,
-        dogInfoState,
+        dogImageState$,
+        dogInfoState$,
       };
     });
     return this.dogsAllArr;
@@ -82,7 +84,7 @@ export class FavoritesService {
     this.cookie.set('favorite', JSON.stringify(this.cookiesArr));
     this.dogsAllArr = this.dogsAllArr?.filter((x) => {
       let result;
-      x.dogImageState.subscribe(
+      x.dogImageState$.subscribe(
         (dogImage) => (result = dogImage.item?.message !== imgUrl)
       );
       return result;
