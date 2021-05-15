@@ -57,28 +57,28 @@
                     class="example-header-image"
                     [ngStyle]="{
                       'background-image':
-                        'url(' + dog.dogInfo?.info.image + ')',
+                        'url(' + dog.dogInfo?.info?.image + ')',
                       'background-size': 'cover'
                     }"
                   ></div>
                   <mat-card-title>{{
-                    dog.dogInfo?.info.breedName
+                    dog.dogInfo?.info?.breedName
                   }}</mat-card-title>
                   <mat-card-subtitle>{{
-                    dog.dogInfo?.info?.breedGroup
+                    dog.dogInfo?.info?.dogInfo?.breedGroup
                   }}</mat-card-subtitle>
                 </mat-card-header>
-                <p>{{ dog.dogInfo?.info.description }}</p>
+                <p>{{ dog.dogInfo?.info?.description }}</p>
                 <ul [ngStyle]="{ 'list-style-type': 'none' }">
                   <li>
                     <b>Life Expectancy: </b>
-                    {{ dog.dogInfo?.info?.dogInfo.life }}
+                    {{ dog.dogInfo?.info?.dogInfo?.life }}
                   </li>
                   <li>
-                    <b>Height:</b> {{ dog.dogInfo?.info?.dogInfo.height }}
+                    <b>Height:</b> {{ dog.dogInfo?.info?.dogInfo?.height }}
                   </li>
                   <li>
-                    <b>Weight:</b> {{ dog.dogInfo?.info?.dogInfo.weight }}
+                    <b>Weight:</b> {{ dog.dogInfo?.info?.dogInfo?.weight }}
                   </li>
                 </ul>
               </ng-container>
