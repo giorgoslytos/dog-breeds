@@ -1,7 +1,7 @@
 <div
   fxLayout="column"
   fxLayoutAlign="center center"
-  *ngIf="breedList && breedList?.message"
+  *ngIf="apiBreedsSubbreeds"
   [style.margin]="'2rem'"
 >
   <div>
@@ -9,6 +9,7 @@
       <mat-label>Breeds</mat-label>
       <mat-select
         [(ngModel)]="selectedBreeds"
+        (selectionChange)="breedSelectionChanged()"
         multiple
         (openedChange)="populateSubBreeds()"
       >
@@ -22,39 +23,30 @@
             {{ selectedBreeds?.length === 2 ? "other" : "others" }})
           </span>
         </mat-select-trigger>
-        <mat-option *ngFor="let breed of breedListArr" [value]="breed">{{
-          breed
-        }}</mat-option>
+        <mat-option
+          *ngFor="let dog of apiBreedsSubbreeds"
+          [value]="dog.breed"
+          >{{ dog.breed }}</mat-option
+        >
       </mat-select>
     </mat-form-field>
     <!-- SUB BREEDS -->
     <mat-form-field (click)="openModal()" [style.margin-left]="'2rem'">
       <mat-label>Sub-Breeds</mat-label>
-      <mat-select [(ngModel)]="selectedSubBreeds" multiple>
+      <mat-select [(ngModel)]="subBreeds" multiple>
         <mat-select-trigger>
-          {{ selectedSubBreeds.length ? selectedSubBreeds[0].subbreed : "" }}
+          {{ subBreeds ? subBreeds[0] : "" }}
           <span
-            *ngIf="selectedSubBreeds.length > 1"
+            *ngIf="subBreeds.length > 1"
             class="example-additional-selection"
           >
-            (+{{ selectedSubBreeds.length - 1 }}
-            {{ selectedSubBreeds.length === 2 ? "other" : "others" }})
+            (+{{ subBreeds.length - 1 }}
+            {{ subBreeds.length === 2 ? "other" : "others" }})
           </span>
         </mat-select-trigger>
-        <mat-option *ngFor="let dog of breedSubbreedMask" [value]="dog">
-          {{ dog.subbreed | getBreedName: breedList:selectedBreeds }} -
+        <mat-option *ngFor="let dog of subBreedListArr" [value]="dog.subbreed">
+          {{ dog.breed }} -
           {{ dog.subbreed }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field [style.margin-left]="'2rem'">
-      <mat-label>Quantity</mat-label>
-      <mat-select [(ngModel)]="selectedQuantity" name="selectedQuantity">
-        <mat-option
-          *ngFor="let selectQuantity of quantity"
-          [value]="selectQuantity"
-        >
-          {{ selectQuantity }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -63,16 +55,13 @@
         mat-raised-button
         color="primary"
         (click)="fetchDogs(selectedQuantity)"
-        [disabled]="
-          selectedQuantity === 'none' ||
-          selectedBreeds === null ||
-          selectedBreeds.length === 0
-        "
+        [disabled]="selectedBreeds === null || selectedBreeds.length === 0"
       >
-        get {{ selectedQuantity }}
+        get {{ numberOfDogs }} doggies!
+        <!-- {{ selectedQuantity }} -->
       </button>
-      <p *ngIf="dogsImgObs?.length" [style.margin-top]="'2rem'">
-        We found {{ dogsImgObs?.length }} puppies
+      <p *ngIf="dogs?.length" [style.margin-top]="'2rem'">
+        We found {{ dogs?.length }} puppies
       </p>
     </div>
   </div>
@@ -80,9 +69,8 @@
 <div>
   <div fxLayout="row wrap" fxLayoutAlign="space-around start">
     <app-dog-card
-      *ngFor="let dog of dogsImgObs"
-      [dogImageState$]="dog.dogImageState$"
-      [dogInfoState$]="dog.dogInfoState$"
+      *ngFor="let dog of dogs"
+      [dog]="dog"
       [breedsPageMode]="true"
     ></app-dog-card>
   </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CombinedDogInfoState$ } from 'src/app/interfaces/CombinedDogInfoState.interface';
+import { Dog } from 'src/app/interfaces/Dog.interface';
 import { FavoritesService } from 'src/app/services/favorites.service';
 
 @Component({
@@ -8,14 +9,16 @@ import { FavoritesService } from 'src/app/services/favorites.service';
   styleUrls: ['./favorites-page.component.scss'],
 })
 export class FavoritesPageComponent implements OnInit {
-  public dogsAllArr: CombinedDogInfoState$[] | undefined;
+  public dogs: Dog[] | undefined;
 
   constructor(private favoritesService: FavoritesService) {}
 
   ngOnInit() {
-    this.dogsAllArr = this.favoritesService.initializeDogsAllArr();
-    this.favoritesService.dogsAllArrChange.subscribe(
-      (arr: CombinedDogInfoState$[]) => (this.dogsAllArr = arr)
-    );
+    this.dogs = this.favoritesService.fetchFavorites();
+  }
+  dogsChanged() {
+    setTimeout(() => {
+      this.dogs = this.favoritesService.fetchFavorites();
+    }, 300);
   }
 }

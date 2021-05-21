@@ -13,7 +13,6 @@ import { DogCeoImageState } from 'src/app/interfaces/DogCeoImageState.interface'
 import { ApiDogBreedsInfoState } from 'src/app/interfaces/ApiDogBreedsInfoState.interface';
 import { ContentState } from 'src/app/types/ContentState';
 import { FavoritesService } from 'src/app/services/favorites.service';
-import { map } from 'rxjs/operators';
 import { Dog } from 'src/app/interfaces/Dog.interface';
 
 @Component({
@@ -35,7 +34,8 @@ export class DogCardComponent implements OnInit {
   private imageURLEl!: ElementRef;
   @Output()
   public getAnotherDog: EventEmitter<string> = new EventEmitter<string>();
-
+  @Output()
+  public dogsChange$ = new EventEmitter();
   @Input()
   public dog: Dog = { state: ContentState.LOADING };
 
@@ -49,37 +49,34 @@ export class DogCardComponent implements OnInit {
   constructor(private favoritesService: FavoritesService) {}
 
   ngOnInit() {
-    this.cookiesArr = this.favoritesService.cookiesArr;
+    // this.cookiesArr = this.favoritesService.cookiesArr;
     this.favorited = this.favoritesMode;
-    this.dog.dogInfo?.info?.breedName;
   }
 
   // when getAnotherDog is triggered
   ngOnChanges(changes: SimpleChanges): void {
     this.favorited = false;
     this.xpandStatus = false;
-    if (changes['dogInfoState$']) {
-      console.log('oeo');
-    }
   }
   handleFavorite() {
-    if (this.dogInfoState.state !== ContentState.LOADING) {
+    if (this.dog.state === ContentState.LOADED) {
       if (!this.favorited) {
-        this.favorited = this.favoritesService.addFavorite(
-          this.imageURLEl.nativeElement.src
-        );
-        console.log({ image: this.dogImageState, info: this.dogInfoState });
+        // this.favorited = this.favoritesService.addFavorite(
+        //   this.imageURLEl.nativeElement.src
+        // );
+        this.favoritesService.addFavorite(this.dog);
+        this.favorited = true;
       } else {
-        this.favorited = this.favoritesService.removeFavorite(
-          this.imageURLEl.nativeElement.src
-        );
+        this.favorited = false;
+        this.favoritesService.removeFavorite(this.dog);
+        this.dogsChange$.emit();
+        // this.favorited = this.favoritesService.removeFavorite(
+        //   this.imageURLEl.nativeElement.src
+        // );
       }
     }
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-}
-function ObserveInput() {
-  throw new Error('Function not implemented.');
 }
