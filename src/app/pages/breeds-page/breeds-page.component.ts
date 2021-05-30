@@ -18,7 +18,7 @@ import { Dog } from 'src/app/interfaces/Dog.interface';
 export class BreedsPageComponent implements OnInit {
   public selectedBreeds: string[] = [];
   public subBreeds: string[] = [];
-  public selectedSubBreeds: { breed: string; subbreed: string }[] = [];
+  public selectedSubBreeds: { breed: string; selectedSubBreeds: string }[] = [];
   public selectedQuantity: string = 'none';
   public quantity = ['one', 'all'];
   public breedList: DogCeoBreedsListObj | undefined;
@@ -49,28 +49,23 @@ export class BreedsPageComponent implements OnInit {
   }
 
   breedSelectionChanged() {
-    this.availableSubbreeds = this.apiBreedsSubbreeds.filter(
-      (x) => this.selectedBreeds.includes(x?.breed!) && x.subbreed.length
-    );
+    let array = new Array();
+    this.apiBreedsSubbreeds
+      .filter(
+        (x) => this.selectedBreeds.includes(x?.breed!) && x.subbreed.length
+      )
+      .forEach((x) => {
+        x.subbreed.forEach((y) => {
+          array.push({ breed: x.breed, subbreed: y });
+        });
+      });
+    this.subBreedListArr = [...array];
 
     this.numberOfDogs = this.selectedBreeds.length;
   }
 
-  populateSubBreeds() {
-    if (this.availableSubbreeds === []) {
-      this.dialog.open(ModalComponent);
-      return;
-    }
-    let array = new Array();
-    this.availableSubbreeds.forEach((x) => {
-      x.subbreed.forEach((y) => {
-        array.push({ breed: x.breed, subbreed: y });
-      });
-    });
-    this.subBreedListArr = [...array];
-  }
   openModal() {
-    if (!this.availableSubbreeds.length) {
+    if (!this.subBreedListArr.length) {
       this.dialog.open(ModalComponent, {
         data: {
           title: 'Notification',

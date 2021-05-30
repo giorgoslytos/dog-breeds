@@ -11,7 +11,6 @@
         [(ngModel)]="selectedBreeds"
         (selectionChange)="breedSelectionChanged()"
         multiple
-        (openedChange)="populateSubBreeds()"
       >
         <mat-select-trigger>
           {{ selectedBreeds ? selectedBreeds[0] : "" }}
