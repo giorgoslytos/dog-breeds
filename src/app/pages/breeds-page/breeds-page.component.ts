@@ -4,8 +4,9 @@ import { DogApiService } from 'src/app/services/dog-api.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { ContentState } from 'src/app/types/ContentState';
-import { filter, mergeMap, reduce } from 'rxjs/operators';
+import { catchError, filter, mergeMap, reduce } from 'rxjs/operators';
 import { Dog } from 'src/app/interfaces/Dog.interface';
+import { forkJoin, of } from 'rxjs';
 
 @Component({
   selector: 'app-breeds-page',
@@ -78,28 +79,32 @@ export class BreedsPageComponent implements OnInit {
   }
 
   public fetchDogs(quantity: string) {
+    this.fetchingDogs = true;
     this.dogs = [];
-    const dogsByBreed: string[] = this.selectedBreeds.filter(
-      (breed) => !this.subBreedListMap.some(x => x.breed === breed));
-    console.log(dogsByBreed)
-    dogsByBreed.forEach((dogName: string) =>
-      this.dogApiService
-        .getSpecificDog(dogName)
-        .pipe(filter((x) => x.state === ContentState.LOADED))
-        .subscribe((dog) => {
-          this.dogs.push(dog);
-        })
-    );
-
-    this.subBreedListMap.filter(x => this.subBreeds.includes(x.subbreed))
-      .forEach((dog) =>
+    const dogsByBreed = this.selectedBreeds.filter(
+      (breed) => !this.subBreedListMap.some(x => x.breed === breed)).map(dogName =>
         this.dogApiService
-          .getSpecificSubBreedDog(dog.breed, dog.subbreed)
+          .getSpecificDog(dogName)
           .pipe(filter((x) => x.state === ContentState.LOADED))
-          .subscribe((dog) => {
-            this.dogs.push(dog);
-          })
       );
+
+    const dogsBySubbreed = this.subBreedListMap.filter(x => this.subBreeds.includes(x.subbreed))
+      .map(dog => this.dogApiService
+        .getSpecificSubBreedDog(dog.breed, dog.subbreed)
+        .pipe(filter((x) => x.state === ContentState.LOADED)))
+
+    forkJoin([...dogsByBreed, ...dogsBySubbreed])
+      .subscribe((dogs: Dog[]) => this.dogs = dogs,
+        (error: Error) => {
+          this.dialog.open(ModalComponent, {
+            data: {
+              title: 'Network Error',
+              paragraph: 'Something went wrong! Probably your connection has a problem. Try again later'
+            },
+          });
+          this.fetchingDogs = false;
+        },
+        () => this.fetchingDogs = false);
   }
 
   private subbreedsLength() {

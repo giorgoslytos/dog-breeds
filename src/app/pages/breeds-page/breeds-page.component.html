@@ -31,10 +31,12 @@
       </mat-select>
     </mat-form-field>
     <div [style.margin]="'1rem 0'" fxLayout="column" fxLayoutAlign="center end">
-      <button mat-raised-button color="primary" [disabled]="selectedBreeds === null || selectedBreeds.length === 0 || fetchingDogs"
+      <button mat-raised-button color="primary"
+        [disabled]="selectedBreeds === null || selectedBreeds.length === 0 || fetchingDogs"
         (click)="fetchDogs(selectedQuantity)">
-        get {{ numberOfDogs }} doggies!
-        <!-- {{ selectedQuantity }} -->
+        <span>get</span>
+        <span *ngIf="numberOfDogs===1"> doggy!</span>
+        <span *ngIf="numberOfDogs>1"> doggies!</span>
       </button>
       <p *ngIf="dogs?.length" [style.margin-top]="'2rem'">
         We found {{ dogs?.length }} puppies

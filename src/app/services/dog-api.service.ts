@@ -37,7 +37,7 @@ export class DogApiService {
         ),
         shareReplay(),
         startWith({ state: ContentState.LOADING }),
-        catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+        // catchError((e) => of({ state: ContentState.ERR, error: e.message }))
       );
   }
 
@@ -52,7 +52,7 @@ export class DogApiService {
         mergeMap((dogImage) => this.getDogInfoSpecs(dogImage, breed)),
         shareReplay(),
         startWith({ state: ContentState.LOADING }),
-        catchError((e) => of({ state: ContentState.ERR, error: e.message }))
+        // catchError((e) => of({ state: ContentState.ERR, error: e.message }))
       );
   }
 
@@ -66,7 +66,7 @@ export class DogApiService {
             dogInfo.filter(
               (dog) =>
                 dog.breedName ===
-                dogImage?.title.split(' ').reverse().join(' ').toLowerCase()
+                dogImage?.title.split(' ').reverse().join(' ')?.toLowerCase()
             )[0] ||
             dogInfo.filter(
               (dog) =>

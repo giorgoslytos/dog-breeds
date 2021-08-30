@@ -4,7 +4,7 @@ export const exportTitleFromURL = (urlLink?: string) => {
         .slice(30)
         .replace(/\/[\w,.]+/, '')
         .split('-')
-        .map((x) => x[0].toUpperCase() + x.slice(1))
+        .map((x) => x[0]?.toUpperCase() + x.slice(1))
         .join(' ')
     : '';
 };

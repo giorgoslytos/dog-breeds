@@ -1,4 +1,4 @@
-<mat-card [style.maxWidth]="'400px'" class="mat-card">
+<mat-card [style.maxWidth]="'400px'" class="mat-card" *ngIf="dog">
   <mat-card-header>
     <mat-card-title>{{ dog?.title }}</mat-card-title>
     <mat-card-subtitle *ngIf="dog?.state === ContentState.LOADED"
@@ -30,9 +30,9 @@
           favorited ? "favorite" : "favorite_border"
         }}</mat-icon>
       </button>
-      <button mat-icon-button>
+      <!-- <button mat-icon-button>
         <mat-icon color="primary">share</mat-icon>
-      </button>
+      </button> -->
     </div>
   </mat-card-header>
   <img

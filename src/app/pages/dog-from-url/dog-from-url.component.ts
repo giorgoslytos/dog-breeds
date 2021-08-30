@@ -30,7 +30,10 @@ export class DogFromUrlComponent implements OnInit {
     private apiService: DogApiService,
     private cookie: CookieService
   ) {
-    this.route.params.subscribe((params) => (this.dogLink = atob(params.id)));
+    this.route.params.subscribe((params) => {
+      this.dogLink = atob(params.id);
+      this.dogLink = btoa(params.id);
+    });
   }
 
   ngOnInit(): void {

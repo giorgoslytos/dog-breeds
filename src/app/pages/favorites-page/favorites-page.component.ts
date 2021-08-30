@@ -17,8 +17,19 @@ export class FavoritesPageComponent implements OnInit {
     this.dogs = this.favoritesService.fetchFavorites();
   }
   dogsChanged() {
+    // setTimeout(() => {
+    // this.dogs = this.favoritesService.fetchFavorites();
+    // }, 300);
+  }
+
+  dogDeleted(i: number): void {
     setTimeout(() => {
-      this.dogs = this.favoritesService.fetchFavorites();
+      if (this.dogs) {
+        this.dogs = [...this.dogs?.slice(0, i), ...this.dogs?.slice(i + 1)];
+      }
+      // if (this.dogs?.length) {
+      //   delete this.dogs[i];
+      // }
     }, 300);
   }
 }

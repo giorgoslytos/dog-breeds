@@ -35,9 +35,11 @@ export class DogCardComponent implements OnInit {
   @Output()
   public getAnotherDog: EventEmitter<string> = new EventEmitter<string>();
   @Output()
-  public dogsChange$ = new EventEmitter();
+  public dogsChange = new EventEmitter();
   @Input()
   public dog: Dog = { state: ContentState.LOADING };
+  @Output()
+  public deleteDog = new EventEmitter<void>();
 
   public favorited: boolean = false;
   public cookiesArr: string[] = [];
@@ -49,7 +51,6 @@ export class DogCardComponent implements OnInit {
   constructor(private favoritesService: FavoritesService) {}
 
   ngOnInit() {
-    // this.cookiesArr = this.favoritesService.cookiesArr;
     this.favorited = this.favoritesMode;
   }
 
@@ -61,18 +62,13 @@ export class DogCardComponent implements OnInit {
   handleFavorite() {
     if (this.dog.state === ContentState.LOADED) {
       if (!this.favorited) {
-        // this.favorited = this.favoritesService.addFavorite(
-        //   this.imageURLEl.nativeElement.src
-        // );
         this.favoritesService.addFavorite(this.dog);
         this.favorited = true;
       } else {
         this.favorited = false;
         this.favoritesService.removeFavorite(this.dog);
-        this.dogsChange$.emit();
-        // this.favorited = this.favoritesService.removeFavorite(
-        //   this.imageURLEl.nativeElement.src
-        // );
+        this.deleteDog.emit();
+        this.dogsChange.emit();
       }
     }
   }
